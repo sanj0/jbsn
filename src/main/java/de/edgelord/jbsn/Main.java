@@ -6,7 +6,6 @@ import de.edgelord.jbsn.ui.Button;
 import javax.swing.*;
 import java.awt.*;
 import java.io.*;
-import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
@@ -16,7 +15,7 @@ import java.util.List;
 // jbsn = Just better school notes
 public class Main {
 
-    public static final File CONFIGS = new File("/Users/edgelord/jbsn/config.txt");
+    public static final File CONFIGS = new File(System.getProperty("user.home"), "jbsn/config.txt");
 
     public static final String NOTES_FILE_EXTENSION = "jb";
     public static final FileFilter NOTES_SOURCES_FILTER = pathname -> pathname.getName().endsWith("." + NOTES_FILE_EXTENSION);
@@ -33,7 +32,7 @@ public class Main {
 
     public static final List<Note> NOTES = new ArrayList<>();
 
-    public static void main(String[] args) throws IOException, URISyntaxException {
+    public static void main(String[] args) throws IOException {
 
         if (!Installer.checkInstalled()) {
             Installer.install();
@@ -67,7 +66,7 @@ public class Main {
         NOTES_SOURCES_DIR = new File(String.format(APP_CONFIGS.getNotesSourcesDir(), APP_CONFIGS.getBaseDir()));
         NOTES_DIR = new File(String.format(APP_CONFIGS.getNotesDir(), APP_CONFIGS.getBaseDir()));
 
-        final int noteSourcesCount = NOTES_SOURCES_DIR.listFiles(NOTES_SOURCES_FILTER).length;
+        final int noteSourcesCount = NOTES_SOURCES_DIR.listFiles((dir, name) -> name.endsWith(".pages")).length;
         final int notesCount = NOTES_DIR.listFiles(NOTES_SOURCES_FILTER).length;
         if (noteSourcesCount != notesCount) {
             JOptionPane.showMessageDialog(null, "Notes sources" +
