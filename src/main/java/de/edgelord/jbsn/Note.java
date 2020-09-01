@@ -1,0 +1,137 @@
+package de.edgelord.jbsn;
+
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.Date;
+import java.util.Map;
+
+/**
+ * A note, loaded from a .jb file,
+ * or created programmatically and then
+ * saved to a File
+ */
+public class Note extends Configurations {
+
+    public static final String HEADLINE_KEY = "headline";
+    public static final String SUBJECT_KEY = "subject";
+    public static final String DATE_KEY = "date";
+    public static final String VIEWED_KEY = "viewed";
+    public static final String NOTES_FILE_KEY = "notesFile";
+
+    private File configFile;
+
+    /**
+     * The constructor.
+     *
+     * @param file the file of the note
+     */
+    public Note(final File file) throws IOException {
+        super(Files.readAllLines(file.toPath()).toArray(new String[0]));
+        this.configFile = file;
+        setPreserveOrder(true);
+    }
+
+    public Note(final String headline, final String subject, final Date date, final int viewed, final String relativePathOfNote) {
+        super();
+
+        final Map<String, Object> attributes = getAttributes();
+        attributes.put(HEADLINE_KEY, headline);
+        attributes.put(SUBJECT_KEY, subject);
+        attributes.put(DATE_KEY, date);
+        attributes.put(VIEWED_KEY, viewed);
+        attributes.put(NOTES_FILE_KEY, new File(Main.APP_CONFIGS.getNotesSourcesDir(), relativePathOfNote));
+        setPreserveOrder(true);
+    }
+
+    public static Note createNote(final String headline, final String subject, final Date date) throws IOException, InterruptedException {
+        final Note note = new Note(headline, subject, date, 0,
+                Main.createdNoteFile(subject, date, headline));
+        note.setConfigFile(new File(Main.APP_CONFIGS.getNotesDir(),
+                note.getAttribute(NOTES_FILE_KEY,
+                        new File("/")).getName().split("\\.")[0] + "." + Main.NOTES_FILE_EXTENSION));
+        return note;
+    }
+
+    public String getSubject() {
+        return Utils.getSubject(getAttribute(SUBJECT_KEY));
+    }
+
+    public File getSourceFile() {
+        return getAttribute(NOTES_FILE_KEY);
+    }
+
+    /**
+     * Gets {@link #configFile}.
+     *
+     * @return the value of {@link #configFile}
+     */
+    public File getConfigFile() {
+        return configFile;
+    }
+
+    /**
+     * Sets {@link #configFile}.
+     *
+     * @param configFile the new value of {@link #configFile}
+     */
+    public void setConfigFile(final File configFile) {
+        this.configFile = configFile;
+    }
+
+    @Override
+    protected Object readAttribute(final String key, final String value) {
+        switch (key) {
+            case DATE_KEY:
+                return new Date(Long.parseLong(value));
+
+            case VIEWED_KEY:
+                return Integer.parseInt(value);
+
+            case NOTES_FILE_KEY:
+                return new File(String.format(value, Main.APP_CONFIGS.getNotesSourcesDir()));
+            case HEADLINE_KEY:
+            case SUBJECT_KEY:
+
+            default:
+                return value;
+        }
+    }
+
+    @Override
+    protected String writeAttribute(final String key, final Object value) {
+        switch (key) {
+            case DATE_KEY:
+                final Date date = (Date) value;
+                return String.valueOf(date.getTime());
+
+            case VIEWED_KEY:
+                return String.valueOf((int) value);
+
+            case NOTES_FILE_KEY:
+                final File file = (File) value;
+                return file.getPath().replaceFirst(Main.APP_CONFIGS.getNotesSourcesDir(), "%s");
+            case HEADLINE_KEY:
+            case SUBJECT_KEY:
+
+            default:
+                return value.toString();
+        }
+    }
+
+    public void syncFile(String... path) throws IOException {
+        File out = configFile;
+        if (configFile == null) {
+            if (path.length == 0) {
+                throw new IllegalArgumentException("need config file path when" +
+                        "created programmatically");
+            } else {
+                out = new File(path[0]);
+            }
+        }
+
+        write(new BufferedWriter(new FileWriter(out))).close();
+    }
+}
