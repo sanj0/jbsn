@@ -62,7 +62,10 @@ public class Button extends JButton {
         b.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(final MouseEvent e) {
-                new NotesListWindow(NotesFilterDialog.prompt(b.getParent()));
+                final NotesFilter filter = NotesFilterDialog.prompt(b.getParent());
+                if (filter != null) {
+                    new NotesListWindow(filter);
+                }
             }
         });
 
@@ -74,7 +77,7 @@ public class Button extends JButton {
         b.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(final MouseEvent e) {
-                new NotesListWindow(NotesFilter.latestBySubjects(Schedule.getScheduleBydayOfWeek(Utils.getNextSchoolDay()), 2));
+                new NotesListWindow(NotesFilter.latestBySubjects(Schedule.getScheduleByDayOfWeek(Utils.getNextSchoolDay()), 2));
             }
         });
 

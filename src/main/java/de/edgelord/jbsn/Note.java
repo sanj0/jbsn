@@ -37,12 +37,11 @@ public class Note extends Configurations {
     public Note(final String headline, final String subject, final Date date, final int viewed, final String relativePathOfNote) {
         super();
 
-        final Map<String, Object> attributes = getAttributes();
-        attributes.put(HEADLINE_KEY, headline);
-        attributes.put(SUBJECT_KEY, subject);
-        attributes.put(DATE_KEY, date);
-        attributes.put(VIEWED_KEY, viewed);
-        attributes.put(NOTES_FILE_KEY, new File(Main.APP_CONFIGS.getNotesSourcesDir(), relativePathOfNote));
+        setAttribute(HEADLINE_KEY, headline);
+        setAttribute(SUBJECT_KEY, subject);
+        setAttribute(DATE_KEY, date);
+        setAttribute(VIEWED_KEY, viewed);
+        setAttribute(NOTES_FILE_KEY, new File(Main.APP_CONFIGS.getNotesSourcesDir(), relativePathOfNote));
         setPreserveOrder(true);
     }
 
@@ -82,7 +81,7 @@ public class Note extends Configurations {
     }
 
     @Override
-    protected Object readAttribute(final String key, final String value) {
+    public Object readAttribute(final String key, final String value) {
         switch (key) {
             case DATE_KEY:
                 return new Date(Long.parseLong(value));
@@ -101,7 +100,7 @@ public class Note extends Configurations {
     }
 
     @Override
-    protected String writeAttribute(final String key, final Object value) {
+    public String writeAttribute(final String key, final Object value) {
         switch (key) {
             case DATE_KEY:
                 final Date date = (Date) value;

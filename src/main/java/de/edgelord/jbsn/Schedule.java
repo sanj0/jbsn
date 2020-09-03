@@ -12,7 +12,7 @@ public class Schedule {
     public static final List<String> THURSDAY = new ArrayList<>();
     public static final List<String> FRIDAY = new ArrayList<>();
 
-    public static List<String> getScheduleBydayOfWeek(final DayOfWeek dayOfWeek) {
+    public static List<String> getScheduleByDayOfWeek(final DayOfWeek dayOfWeek) {
         switch (dayOfWeek) {
             case MONDAY:
                 return Schedule.MONDAY;

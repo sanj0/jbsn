@@ -47,7 +47,15 @@ public class Utils {
         if (dayOfWeek >= Calendar.FRIDAY) {
             return DayOfWeek.MONDAY;
         } else {
-            return DayOfWeek.of(dayOfWeek + 1);
+            // DayOfWeek starts at 1 while the Calender
+            // values start at 0. API are not really compatible,
+            // but I don't want to refactor the code,
+            // so this ugly line exists, where the next
+            // day is value-equal to the current day
+            // but the next day because Calender constants
+            // and DayOfWeek values are value-shifted by
+            // one.
+            return DayOfWeek.of(dayOfWeek);
         }
     }
 

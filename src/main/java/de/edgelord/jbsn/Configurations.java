@@ -2,7 +2,9 @@ package de.edgelord.jbsn;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -66,7 +68,7 @@ public class Configurations {
      * @return an object that is a result of the read
      * String
      */
-    protected Object readAttribute(final String key, final String value) {
+    public Object readAttribute(final String key, final String value) {
         return value;
     }
 
@@ -79,12 +81,11 @@ public class Configurations {
      * @param value the object to write
      * @return the string as which to write the object
      */
-    protected String writeAttribute(final String key, final Object value) {
+    public String writeAttribute(final String key, final Object value) {
         return value.toString();
     }
 
     public BufferedWriter write(final BufferedWriter writer) throws IOException {
-
         if (preserveOrder) {
             for (int i = 0; i < order.size(); i++) {
                 final String key = order.get(i);
@@ -102,7 +103,7 @@ public class Configurations {
         return writer;
     }
 
-    private final void writeLine(final BufferedWriter writer, final String key, final Object value) throws IOException {
+    private void writeLine(final BufferedWriter writer, final String key, final Object value) throws IOException {
         writer.write(key + ": " + writeAttribute(key, value));
         writer.write(System.lineSeparator());
     }
@@ -117,16 +118,37 @@ public class Configurations {
     }
 
     public void setAttribute(final String key, final Object o) {
-        attributes.put(key, o);
+        if (attributes.containsKey(key)) {
+            final List<Integer> keys = getKeysForValue(order, key);
+            if (keys.size() == 1) {
+                order.put(keys.get(0), key);
+            } else {
+                System.err.println("Warning: Multiple keys for value " + o.toString() + " panic-rebuilding attributes order!");
+                int index = 0;
+                for (final Map.Entry<String, Object> entry : attributes.entrySet()) {
+                    order.put(index, entry.getKey());
+                    index++;
+                }
+            }
+            attributes.put(key, o);
+        } else {
+            attributes.put(key, o);
+            order.put(order.size(), key);
+        }
     }
 
-    /**
-     * Gets {@link #attributes}.
-     *
-     * @return the value of {@link #attributes}
-     */
-    public Map<String, Object> getAttributes() {
-        return attributes;
+    private <K, V> List<K> getKeysForValue(final Map<K, V> map, final V value) {
+        final List<K> keys = new ArrayList<>();
+        for (final Map.Entry<K, V> entry : map.entrySet()) {
+            final K k = entry.getKey();
+            final V v = entry.getValue();
+
+            if (v.equals(value)) {
+                keys.add(k);
+            }
+        }
+
+        return keys;
     }
 
     /**
