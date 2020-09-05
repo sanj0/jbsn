@@ -6,7 +6,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Date;
-import java.util.Map;
 
 /**
  * A note, loaded from a .jb file,
@@ -41,16 +40,16 @@ public class Note extends Configurations {
         setAttribute(SUBJECT_KEY, subject);
         setAttribute(DATE_KEY, date);
         setAttribute(VIEWED_KEY, viewed);
-        setAttribute(NOTES_FILE_KEY, new File(Main.APP_CONFIGS.getNotesSourcesDir(), relativePathOfNote));
+        setAttribute(NOTES_FILE_KEY, new File(AppConfigManager.APP_CONFIG.getNotesSourcesDir(), relativePathOfNote));
         setPreserveOrder(true);
     }
 
     public static Note createNote(final String headline, final String subject, final Date date) throws IOException, InterruptedException {
         final Note note = new Note(headline, subject, date, 0,
-                Main.createdNoteFile(subject, date, headline));
-        note.setConfigFile(new File(Main.APP_CONFIGS.getNotesDir(),
+                Notes.createdNoteFile(subject, date, headline));
+        note.setConfigFile(new File(AppConfigManager.APP_CONFIG.getNotesDir(),
                 note.getAttribute(NOTES_FILE_KEY,
-                        new File("/")).getName().split("\\.")[0] + "." + Main.NOTES_FILE_EXTENSION));
+                        new File("/")).getName().split("\\.")[0] + "." + Notes.NOTES_FILE_EXTENSION));
         return note;
     }
 
@@ -90,7 +89,7 @@ public class Note extends Configurations {
                 return Integer.parseInt(value);
 
             case NOTES_FILE_KEY:
-                return new File(String.format(value, Main.APP_CONFIGS.getNotesSourcesDir()));
+                return new File(String.format(value, AppConfigManager.APP_CONFIG.getNotesSourcesDir()));
             case HEADLINE_KEY:
             case SUBJECT_KEY:
 
@@ -111,7 +110,7 @@ public class Note extends Configurations {
 
             case NOTES_FILE_KEY:
                 final File file = (File) value;
-                return file.getPath().replaceFirst(Main.APP_CONFIGS.getNotesSourcesDir(), "%s");
+                return file.getPath().replaceFirst(AppConfigManager.APP_CONFIG.getNotesSourcesDir(), "%s");
             case HEADLINE_KEY:
             case SUBJECT_KEY:
 

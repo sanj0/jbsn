@@ -1,8 +1,9 @@
 package de.edgelord.jbsn.ui;
 
-import de.edgelord.jbsn.Main;
 import de.edgelord.jbsn.Note;
+import de.edgelord.jbsn.Notes;
 import de.edgelord.jbsn.Utils;
+import de.edgelord.jbsn.filter.NotesFilter;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,8 +13,8 @@ import java.io.IOException;
 
 public class NotesListWindow extends JFrame {
 
-    private JTable table;
-    private JScrollPane pane;
+    private final JTable table;
+    private final JScrollPane pane;
 
     public NotesListWindow(final NotesFilter filterRules) {
         super("jbsn - Notes");
@@ -47,6 +48,6 @@ public class NotesListWindow extends JFrame {
     }
 
     public void onDoubleClick(final Note note) throws IOException {
-        Main.openNote(note);
+        Notes.openNote(note);
     }
 }

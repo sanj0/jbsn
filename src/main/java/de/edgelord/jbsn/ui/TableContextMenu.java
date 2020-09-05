@@ -1,7 +1,7 @@
 package de.edgelord.jbsn.ui;
 
-import de.edgelord.jbsn.Main;
 import de.edgelord.jbsn.Note;
+import de.edgelord.jbsn.Notes;
 import de.edgelord.jbsn.Utils;
 
 import javax.swing.*;
@@ -11,10 +11,11 @@ import java.util.List;
 
 public class TableContextMenu extends JPopupMenu {
 
-    private List<Note> selectedNotes;
-    private JMenuItem openConfig;
-    private JMenuItem openNotes;
-    private JMenuItem removeNotes;
+    private final List<Note> selectedNotes;
+    private final JMenuItem openConfig;
+    private final JMenuItem openNotes;
+    private final JMenuItem removeNotes;
+
     public TableContextMenu(final List<Note> selectedNotes) {
         this.selectedNotes = selectedNotes;
         openConfig = new JMenuItem("Open config file(s)");
@@ -32,7 +33,7 @@ public class TableContextMenu extends JPopupMenu {
         openNotes.addActionListener(e -> {
             for (final Note n : selectedNotes) {
                 try {
-                    Main.openNote(n);
+                    Notes.openNote(n);
                 } catch (IOException ioException) {
                     ioException.printStackTrace();
                 }
@@ -44,7 +45,7 @@ public class TableContextMenu extends JPopupMenu {
             if (Utils.showDeleteConfirmDialog(selectedNotes.toArray(new Note[0]))) {
                 selectedNotes.forEach(n -> {
                     try {
-                        Main.removeNote(n);
+                        Notes.removeNote(n);
                     } catch (IOException ioException) {
                         ioException.printStackTrace();
                     }

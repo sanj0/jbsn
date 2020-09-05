@@ -1,6 +1,6 @@
 package de.edgelord.jbsn.ui;
 
-import de.edgelord.jbsn.Main;
+import de.edgelord.jbsn.AppConfigManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,63 +11,38 @@ import java.io.IOException;
 
 public class PreferencesWindow extends JFrame {
 
-    private JPanel sideBar = new JPanel();
-        private JButton generalButton = new JButton("General");
-        private JButton appearanceButton = new JButton("Appearance");
-        private JButton filesButton = new JButton("Files");
-        private JButton okButton = new JButton("OK");
+    public static final PreferencesWindow window = new PreferencesWindow();
 
-    private JPanel mainPanel = new JPanel();
-        private JPanel generalPanel = new JPanel();
-            private JLabel namePanel = new JLabel("Name");
-            private JPanel nameSettingsPanel = new JPanel();
-                private JTextField nameField = new JTextField(Main.APP_CONFIGS.getName());
-                private JButton nameOKButton = new JButton("OK");
-        private JPanel appearancePanel = new JPanel();
-            private JLabel fontSizeLabel = new JLabel("Font size");
-            private JSpinner fontSizeSpinner = new JSpinner();
-            private JLabel alternateRowColorLabel = new JLabel("Alternate row color");
-            private JButton pickButton = new JButton("Pick");
-    private JPanel filesPanel = new JPanel();
-        private JButton configButton = new JButton("Config");
-        private JButton baseDir = new JButton("Base dir");
-        private JButton notesDir = new JButton("Notes dir");
-        private JButton notesConifgDir = new JButton("Notes config dir");
+    private final JPanel sideBar = new JPanel();
+    private final JButton filesButton = new JButton("Files");
+    private final JButton okButton = new JButton("OK");
+
+    private final JPanel mainPanel = new JPanel();
+    private final JPanel filesPanel = new JPanel();
+    private final JButton configButton = new JButton("Config");
+    private final JButton baseDir = new JButton("Base dir");
+    private final JButton notesDir = new JButton("Notes dir");
+    private final JButton notesConifgDir = new JButton("Notes config dir");
 
     public PreferencesWindow() throws HeadlessException {
         super("Prefernces - jbsn");
+
         setLayout(new BorderLayout());
 
-        generalPanel.setLayout(new BoxLayout(generalPanel, BoxLayout.Y_AXIS));
-        generalPanel.setVisible(false);
-        generalPanel.add(namePanel);
-        generalPanel.add(nameSettingsPanel);
-        nameSettingsPanel.add(nameField);
-        nameSettingsPanel.add(nameOKButton);
-
-        appearancePanel.setLayout(new BoxLayout(appearancePanel, BoxLayout.Y_AXIS));
-        appearancePanel.setVisible(false);
-        appearancePanel.add(fontSizeLabel);
-        appearancePanel.add(fontSizeSpinner);
-        appearancePanel.add(alternateRowColorLabel);
-        appearancePanel.add(pickButton);
-
+        // build files panel
         filesPanel.setLayout(new BoxLayout(filesPanel, BoxLayout.Y_AXIS));
         filesPanel.add(configButton);
         filesPanel.add(baseDir);
         filesPanel.add(notesDir);
         filesPanel.add(notesConifgDir);
 
+        // build sidebar
         sideBar.setLayout(new BoxLayout(sideBar, BoxLayout.Y_AXIS));
         sideBar.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 1, Color.black));
-        sideBar.add(generalButton);
-        sideBar.add(appearanceButton);
         sideBar.add(filesButton);
         sideBar.add(Box.createVerticalStrut(200));
         sideBar.add(okButton);
 
-        mainPanel.add(generalPanel);
-        mainPanel.add(appearancePanel);
         mainPanel.add(filesPanel);
 
         add(sideBar, BorderLayout.WEST);
@@ -77,11 +52,12 @@ public class PreferencesWindow extends JFrame {
         setLocationRelativeTo(null);
         setVisible(true);
 
+        // add action listeners
         configButton.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(final ActionEvent e) {
                 try {
-                    Desktop.getDesktop().open(Main.CONFIGS);
+                    Desktop.getDesktop().open(AppConfigManager.CONFIG);
                 } catch (IOException ioException) {
                     ioException.printStackTrace();
                 }
@@ -92,7 +68,7 @@ public class PreferencesWindow extends JFrame {
             @Override
             public void actionPerformed(final ActionEvent e) {
                 try {
-                    Desktop.getDesktop().open(new File(Main.APP_CONFIGS.getBaseDir()));
+                    Desktop.getDesktop().open(new File(AppConfigManager.APP_CONFIG.getBaseDir()));
                 } catch (IOException ioException) {
                     ioException.printStackTrace();
                 }
@@ -103,7 +79,7 @@ public class PreferencesWindow extends JFrame {
             @Override
             public void actionPerformed(final ActionEvent e) {
                 try {
-                    Desktop.getDesktop().open(new File(Main.APP_CONFIGS.getNotesSourcesDir()));
+                    Desktop.getDesktop().open(new File(AppConfigManager.APP_CONFIG.getNotesSourcesDir()));
                 } catch (IOException ioException) {
                     ioException.printStackTrace();
                 }
@@ -114,7 +90,7 @@ public class PreferencesWindow extends JFrame {
             @Override
             public void actionPerformed(final ActionEvent e) {
                 try {
-                    Desktop.getDesktop().open(new File(Main.APP_CONFIGS.getNotesDir()));
+                    Desktop.getDesktop().open(new File(AppConfigManager.APP_CONFIG.getNotesDir()));
                 } catch (IOException ioException) {
                     ioException.printStackTrace();
                 }

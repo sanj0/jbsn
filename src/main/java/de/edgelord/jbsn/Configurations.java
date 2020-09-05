@@ -25,7 +25,12 @@ public class Configurations {
      * using {@link #write(java.io.BufferedWriter)}
      */
     private final Map<String, Object> attributes = new HashMap<>();
-
+    /**
+     * Contains the order of config
+     * for file-writing when {@link #preserveOrder}
+     * is <code>true</code>.
+     */
+    private final Map<Integer, String> order = new HashMap<>();
     /**
      * Set to to <code>true</code> if the order
      * of key/value pairs should be preserved
@@ -34,13 +39,6 @@ public class Configurations {
      * most efficient.
      */
     private boolean preserveOrder = false;
-
-    /**
-     * Contains the order of config
-     * for file-writing when {@link #preserveOrder}
-     * is <code>true</code>.
-     */
-    private final Map<Integer, String> order = new HashMap<>();
 
     /**
      * The constructor.
@@ -63,7 +61,7 @@ public class Configurations {
      * Default implementation returns
      * the given String.
      *
-     * @param key the key of the read attribute
+     * @param key   the key of the read attribute
      * @param value the given String to receive an object from
      * @return an object that is a result of the read
      * String
@@ -77,7 +75,7 @@ public class Configurations {
      * Default implementation returns the toString
      * representation of the object.
      *
-     * @param key the key of the attribute to write
+     * @param key   the key of the attribute to write
      * @param value the object to write
      * @return the string as which to write the object
      */
@@ -108,12 +106,12 @@ public class Configurations {
         writer.write(System.lineSeparator());
     }
 
-    public < T > T getAttribute(final String key) {
+    public <T> T getAttribute(final String key) {
         final Object v = attributes.get(key);
         return (T) v;
     }
 
-    public < T > T getAttribute(final String key, final T type) {
+    public <T> T getAttribute(final String key, final T type) {
         return getAttribute(key);
     }
 

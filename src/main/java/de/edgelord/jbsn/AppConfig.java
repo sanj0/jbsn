@@ -9,7 +9,7 @@ import java.nio.file.Files;
  * The main configurations of the application.
  * All values are strings.
  */
-public class AppConfigs extends Configurations {
+public class AppConfig extends Configurations {
 
     public static final String BASE_DIR_KEY = "base-dir";
     public static final String NOTES_DIR_KEY = "notes-dir";
@@ -24,12 +24,12 @@ public class AppConfigs extends Configurations {
     public static final String THURSDAY_KEY = "thursday";
     public static final String FRIDAY_KEY = "friday";
 
-    public AppConfigs(final File file) throws IOException {
+    public AppConfig(final File file) throws IOException {
         super(Files.readAllLines(file.toPath()).toArray(new String[0]));
         setPreserveOrder(true);
     }
 
-    public AppConfigs(final BufferedReader reader) {
+    public AppConfig(final BufferedReader reader) {
         super(reader.lines().toArray(String[]::new));
     }
 

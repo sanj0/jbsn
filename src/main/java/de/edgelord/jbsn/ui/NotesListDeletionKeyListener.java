@@ -1,7 +1,7 @@
 package de.edgelord.jbsn.ui;
 
-import de.edgelord.jbsn.Main;
 import de.edgelord.jbsn.Note;
+import de.edgelord.jbsn.Notes;
 import de.edgelord.jbsn.Utils;
 
 import javax.swing.*;
@@ -20,7 +20,7 @@ public class NotesListDeletionKeyListener extends KeyAdapter {
             if (confirmedDelete) {
                 for (final Note n : notes) {
                     try {
-                        Main.removeNote(n);
+                        Notes.removeNote(n);
                     } catch (IOException ioException) {
                         ioException.printStackTrace();
                     }

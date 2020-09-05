@@ -1,15 +1,18 @@
 package de.edgelord.jbsn.ui;
 
-import de.edgelord.jbsn.Main;
 import de.edgelord.jbsn.Note;
+import de.edgelord.jbsn.Notes;
 import de.edgelord.jbsn.Utils;
+import de.edgelord.jbsn.filter.NotesFilter;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class TableSupply {
 
@@ -34,7 +37,7 @@ public class TableSupply {
                 final Note[] notes = Utils.getSelectedNotes((JTable) e.getSource());
                 for (final Note n : notes) {
                     try {
-                        Main.openNote(n);
+                        Notes.openNote(n);
                     } catch (IOException ioException) {
                         ioException.printStackTrace();
                     }
@@ -57,7 +60,7 @@ public class TableSupply {
     }
 
     private static void addMatchingNotes(final JTable client, final NotesFilter rules) {
-        final List<Note> filteredNotes = rules.filter(Main.NOTES);
+        final List<Note> filteredNotes = rules.filter(Notes.NOTES);
         DefaultTableModel tableModel = (DefaultTableModel) client.getModel();
         tableModel.setRowCount(0);
 

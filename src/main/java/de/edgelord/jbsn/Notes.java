@@ -1,0 +1,98 @@
+package de.edgelord.jbsn;
+
+import de.edgelord.jbsn.ui.TableSupply;
+
+import java.awt.*;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+public class Notes {
+    public static final String NOTES_FILE_EXTENSION = "jb";
+    public static final FileFilter NOTES_SOURCES_FILTER = pathname -> pathname.getName().endsWith("." + NOTES_FILE_EXTENSION);
+    public static final List<Note> NOTES = new ArrayList<>();
+    public static File NOTES_SOURCES_DIR;
+    public static File NOTES_DIR;
+
+    static void loadNotes() throws IOException {
+        final long startT = System.currentTimeMillis();
+        final File[] files = NOTES_DIR.listFiles(NOTES_SOURCES_FILTER);
+
+        for (final File file : files) {
+            NOTES.add(new Note(file));
+        }
+        System.out.println("took " + (System.currentTimeMillis() - startT) / 1000f + "s to load " + NOTES.size() + " notes.");
+    }
+
+    public static void openNote(final Note note) throws IOException {
+        note.setAttribute(Note.VIEWED_KEY, note.getAttribute(Note.VIEWED_KEY, 0) + 1);
+        TableSupply.update();
+        Desktop.getDesktop().open(note.getSourceFile());
+    }
+
+    public static Note getNote(final String subject, final String date, final String headline) {
+        for (final Note n : NOTES) {
+            if (n.getSubject().equals(Utils.getSubject(subject))
+                    && Utils.dateToString(n.getAttribute(Note.DATE_KEY)).equals(date)
+                    && n.getAttribute(Note.HEADLINE_KEY).equals(headline)) {
+                return n;
+            }
+        }
+
+        return null;
+    }
+
+    public static void addNote() throws IOException, InterruptedException {
+        String[] params = Utils.notesDialog(null);
+        if (params != null) {
+            final Note note = Note.createNote(params[1], params[0], Utils.today());
+            NOTES.add(note);
+            note.write(new BufferedWriter(new FileWriter(note.getConfigFile())));
+            TableSupply.update();
+        }
+    }
+
+    // preserves the actual document
+    public static void removeNote(final Note n) throws IOException {
+        final File copy = new File(AppConfigManager.APP_CONFIG.getRecentlyDeletedDir(), n.getAttribute(Note.HEADLINE_KEY, "").replaceAll("/[<>:\"/|?*]/", "") + ".pages");
+        copy.createNewFile();
+        Files.copy(n.getSourceFile().toPath(), copy.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        Files.delete(n.getConfigFile().toPath());
+        Files.delete(n.getSourceFile().toPath());
+        NOTES.remove(n);
+        TableSupply.update();
+    }
+
+    public static void syncNotes() throws IOException {
+        for (final Note n : NOTES) {
+            n.syncFile();
+        }
+    }
+
+    /**
+     * Creates a note file from a template
+     * containing the given headline and date.
+     * And returns the name of it.
+     * Only creates the source, not the configs
+     *
+     * @return the name of the new note file
+     */
+    public static String createdNoteFile(final String subject, final Date date,
+                                         final String headline) throws IOException, InterruptedException {
+        final File file = getNextNotesSourceFile();
+        final String absolutePathHFS = Utils.toHFSPath(file.getAbsolutePath());
+        final ProcessBuilder processBuilder = new ProcessBuilder("osascript", AppConfigManager.APP_CONFIG.getTemplateScript(),
+                absolutePathHFS, subject, Utils.dateToString(date), headline);
+        processBuilder.start().waitFor();
+
+        return file.getName();
+    }
+
+    // returns the abs path to the next notes source name
+    private static File getNextNotesSourceFile() {
+        return new File(AppConfigManager.APP_CONFIG.getNotesSourcesDir(), (NOTES.size() + ".pages"));
+    }
+}

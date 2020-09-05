@@ -4,31 +4,41 @@ import javax.swing.*;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.util.Objects;
 
 public class Installer {
 
-    private static final String USER_HOME = System.getProperty("user.home");
-    private static final File INSTALL_CHECK = new File(USER_HOME, ".jbsnInstalled");
+    private static final File INSTALL_CHECK_FILE = new File(System.getProperty("user.home"), ".jbsnInstalled");
+    private static final ClassLoader CLASS_LOADER = Installer.class.getClassLoader();
+    private static final String CONFIGS_RESOURCE_NAME = "config.txt";
 
     public static boolean checkInstalled() {
-        return INSTALL_CHECK.exists();
+        return INSTALL_CHECK_FILE.exists();
     }
 
-    public static void install() throws IOException {
-
+    public static void install() {
         try {
-            Main.APP_CONFIGS = new AppConfigs(new BufferedReader(new InputStreamReader(Installer.class.getClassLoader().getResourceAsStream("config.txt"))));
-            new File(Main.APP_CONFIGS.getBaseDir()).mkdirs();
-            new File(Main.APP_CONFIGS.getNotesDir()).mkdirs();
-            new File(Main.APP_CONFIGS.getNotesSourcesDir()).mkdirs();
-            new File(Main.APP_CONFIGS.getRecentlyDeletedDir()).mkdirs();
-            new File(Main.APP_CONFIGS.getTemplateScript()).getParentFile().mkdirs();
+            final InputStreamReader configsStream = new InputStreamReader(
+                    Objects.requireNonNull(CLASS_LOADER.getResourceAsStream(CONFIGS_RESOURCE_NAME)));
+            final BufferedReader configsReader = new BufferedReader(configsStream);
+            AppConfigManager.APP_CONFIG = new AppConfig(new BufferedReader(new InputStreamReader(Objects.requireNonNull(Installer.class.getClassLoader().getResourceAsStream("config.txt")))));
+            final boolean baseDirCreated = new File(AppConfigManager.APP_CONFIG.getBaseDir()).mkdirs();
+            final boolean notesDirCreated = new File(AppConfigManager.APP_CONFIG.getNotesDir()).mkdir();
+            final boolean noteSourcesDirCreated = new File(AppConfigManager.APP_CONFIG.getNotesSourcesDir()).mkdir();
+            final boolean recentlyDeletedDirCreated = new File(AppConfigManager.APP_CONFIG.getRecentlyDeletedDir()).mkdir();
+            final boolean templateScriptDorCreated = new File(AppConfigManager.APP_CONFIG.getTemplateScript())
+                    .getParentFile().mkdir();
             // copy script file
-            Files.copy(Installer.class.getClassLoader().getResourceAsStream("scripts/pages.scpt"), new File(Main.APP_CONFIGS.getTemplateScript()).toPath(), StandardCopyOption.REPLACE_EXISTING);
+            copyFromResourcesToFile("scripts/pages.scpt", AppConfigManager.APP_CONFIG.getTemplateScript());
             // copy config file
-            Files.copy(Installer.class.getClassLoader().getResourceAsStream("config.txt"), new File(Main.APP_CONFIGS.getBaseDir(), "config.txt").toPath(), StandardCopyOption.REPLACE_EXISTING);
+            copyFromResourcesToFile(CONFIGS_RESOURCE_NAME, AppConfigManager.CONFIG.getAbsolutePath());
 
-            INSTALL_CHECK.createNewFile();
+            final boolean installCheckFileCreated = INSTALL_CHECK_FILE.createNewFile();
+
+            if (!installCheckFileCreated) {
+                JOptionPane.showMessageDialog(null, "Could not create install check file",
+                        "Error installing jbsn", JOptionPane.ERROR_MESSAGE);
+            }
         } catch (Exception e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, "Error installing jbsn: " + e.getMessage(), "Couldn't install jbsn", JOptionPane.ERROR_MESSAGE);
@@ -38,5 +48,10 @@ public class Installer {
         JOptionPane.showMessageDialog(null, "jbsn is now installed on your system. It is fully usable" +
                 " on next launch.", "Installation complete.", JOptionPane.INFORMATION_MESSAGE);
         System.exit(0);
+    }
+
+    private static void copyFromResourcesToFile(final String src, final String dst) throws IOException {
+        Files.copy(Objects.requireNonNull(CLASS_LOADER.getResourceAsStream(src)), new File(dst).toPath(),
+                StandardCopyOption.REPLACE_EXISTING);
     }
 }

@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Schedule {
-    
+
     public static final List<String> MONDAY = new ArrayList<>();
     public static final List<String> TUESDAY = new ArrayList<>();
     public static final List<String> WEDNESDAY = new ArrayList<>();
@@ -34,32 +34,36 @@ public class Schedule {
 
         return null;
     }
-    
-    /**clears the lists and adds all from the config file*/
+
+    /**
+     * clears the lists and adds all from the config file
+     */
     public static void readFromConfig() {
         MONDAY.clear();
-        MONDAY.addAll(readScheduleForDay(AppConfigs.MONDAY_KEY));
+        MONDAY.addAll(readScheduleForDay(AppConfig.MONDAY_KEY));
         TUESDAY.clear();
-        TUESDAY.addAll(readScheduleForDay(AppConfigs.TUESDAY_KEY));
+        TUESDAY.addAll(readScheduleForDay(AppConfig.TUESDAY_KEY));
         WEDNESDAY.clear();
-        WEDNESDAY.addAll(readScheduleForDay(AppConfigs.WEDNESDAY_KEY));
+        WEDNESDAY.addAll(readScheduleForDay(AppConfig.WEDNESDAY_KEY));
         THURSDAY.clear();
-        THURSDAY.addAll(readScheduleForDay(AppConfigs.THURSDAY_KEY));
+        THURSDAY.addAll(readScheduleForDay(AppConfig.THURSDAY_KEY));
         FRIDAY.clear();
-        FRIDAY.addAll(readScheduleForDay(AppConfigs.FRIDAY_KEY));
+        FRIDAY.addAll(readScheduleForDay(AppConfig.FRIDAY_KEY));
     }
 
-    /**writes all day's schedules to the app config file*/
+    /**
+     * writes all day's schedules to the app config file
+     */
     public static void write() {
-        Main.APP_CONFIGS.setAttribute(AppConfigs.MONDAY_KEY, String.join(",", MONDAY));
-        Main.APP_CONFIGS.setAttribute(AppConfigs.TUESDAY_KEY, String.join(",", TUESDAY));
-        Main.APP_CONFIGS.setAttribute(AppConfigs.WEDNESDAY_KEY, String.join(",", WEDNESDAY));
-        Main.APP_CONFIGS.setAttribute(AppConfigs.THURSDAY_KEY, String.join(",", THURSDAY));
-        Main.APP_CONFIGS.setAttribute(AppConfigs.FRIDAY_KEY, String.join(",", FRIDAY));
+        AppConfigManager.APP_CONFIG.setAttribute(AppConfig.MONDAY_KEY, String.join(",", MONDAY));
+        AppConfigManager.APP_CONFIG.setAttribute(AppConfig.TUESDAY_KEY, String.join(",", TUESDAY));
+        AppConfigManager.APP_CONFIG.setAttribute(AppConfig.WEDNESDAY_KEY, String.join(",", WEDNESDAY));
+        AppConfigManager.APP_CONFIG.setAttribute(AppConfig.THURSDAY_KEY, String.join(",", THURSDAY));
+        AppConfigManager.APP_CONFIG.setAttribute(AppConfig.FRIDAY_KEY, String.join(",", FRIDAY));
     }
-    
+
     private static List<String> readScheduleForDay(final String day) {
-        final String[] subjects = Main.APP_CONFIGS.getAttribute(day, "").split(",");
+        final String[] subjects = AppConfigManager.APP_CONFIG.getAttribute(day, "").split(",");
         final List<String> schedule = new ArrayList<>();
 
         for (String s : subjects) {

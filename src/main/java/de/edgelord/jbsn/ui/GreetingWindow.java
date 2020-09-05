@@ -4,8 +4,7 @@ import de.edgelord.jbsn.Utils;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.ActionEvent;
 
 /**
  * A JFrame that contains four centred buttons
@@ -13,54 +12,50 @@ import java.awt.event.MouseEvent;
  */
 public class GreetingWindow extends JFrame {
 
-    public GreetingWindow(final Button... buttons) {
-        super("jbsn");
+    private final JButton addNoteButton = Buttons.CREATE_NOTE_BUTTON();
+    private final JButton viewAllNotesButton = Buttons.VIEW_ALL_NOTES();
+    private final JButton viewFilteredNotesButton = Buttons.VIEW_FILTERED_NOTES();
+    private final JButton notesForNextSchoolDayButton = Buttons.VIEW_NOTES_FOR_NEXT_SCHOOL_DAY();
+
+    public GreetingWindow() {
+        super("jbsn - just better school notes");
 
         setPreferredSize(new Dimension(750, 750));
-        /*ugly af*/
-        add(new JPanel(new GridLayout(2, 2)) {
-            {
-                add(new JButton("<html><center>&#9881;<center></html>") {
-                    {
-                        setFont(getFont().deriveFont(50f));
-                        addMouseListener(new MouseAdapter() {
-                            @Override
-                            public void mouseClicked(final MouseEvent e) {
-                                Utils.openPreferences();
-                            }
-                        });
-                        addMouseListener(new MouseAdapter() {
-                            @Override
-                            public void mouseClicked(final MouseEvent e) {
-                                new PreferencesWindow();
-                            }
-                        });
-                    }
-                });
-                for (int i = 0; i < 3; i++) {
-                    add(Box.createGlue());
-                }
-            }
-        });
+        add(new SettingsButtonPanel());
 
-        if (buttons.length <  4) {
-            throw new IllegalArgumentException("GreetingWindow needs four Buttons");
-        } else {
-            setLayout(new GridLayout(4, 4));
+        setLayout(new GridLayout(4, 4));
 
-            int buttonIndex = 0;
-            for (int i = 1; i <= 15; i++) {
-                if (i <= 4 || i == 7 || i == 8 || i >= 11) {
-                    add(Box.createGlue());
-                } else {
-                    add(buttons[buttonIndex++]);
-                }
-            }
-        }
+        //Add buttons and placeholders in order
+        // to build the layout
+        Utils.placeholderHere(this, 4);
+        add(addNoteButton);
+        add(viewAllNotesButton);
+        Utils.placeholderHere(this, 2);
+        add(viewFilteredNotesButton);
+        add(notesForNextSchoolDayButton);
+        Utils.placeholderHere(this, 5);
 
         pack();
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-        setVisible(true);
+    }
+
+    static class SettingsButtonPanel extends JPanel {
+        public SettingsButtonPanel() {
+            final JButton settingsButton = new JButton("<html><center>&#9881;<center></html>");
+            settingsButton.setFont(getFont().deriveFont(35f));
+            settingsButton.addActionListener(new AbstractAction() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    PreferencesWindow.window.setVisible(true);
+                }
+            });
+
+            // build layout with the button
+            // and placeholders
+            setLayout(new GridLayout(2, 2));
+            add(settingsButton);
+            Utils.placeholderHere(this, 3);
+        }
     }
 }

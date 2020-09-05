@@ -1,7 +1,8 @@
-package de.edgelord.jbsn.ui;
+package de.edgelord.jbsn.filter;
 
 import de.edgelord.jbsn.Note;
 import de.edgelord.jbsn.Utils;
+
 import java.util.*;
 
 // matches all
@@ -13,59 +14,14 @@ public class NotesFilter {
     private int timesViewed = -1;
     private TimesViewedMatcher timesViewedMatcher = null;
 
-    public NotesFilter() {
+    protected NotesFilter() {
     }
 
     /**
-     *
      * @return a new instance of {@code NotesFilter}
-     * using the one and only constructor without arguments
      */
     public static NotesFilter filter() {
         return new NotesFilter();
-    }
-
-    public static NotesFilter latestBySubjects(final List<String> subjects, final int count) {
-        return new NotesFilter() {
-            private final Map<String, List<Note>> subjectMap = new HashMap<>();
-            {
-                for (final String s : subjects) {
-                    subjectMap.put(Utils.getSubject(s), new ArrayList<>());
-                }
-            }
-            @Override
-            public List<Note> filter(final List<Note> notes) {
-                for (final Note n : notes) {
-                    final String subject = n.getSubject();
-                    if (subjectMap.containsKey(subject)) {
-                        subjectMap.get(subject).add(n);
-                    }
-                }
-
-                final List<Note> filteredNotes = new ArrayList<>();
-
-                for (final List<Note> notesList : subjectMap.values()) {
-                    final List<Note> sortedNotes = new ArrayList<>(notesList);
-                    sortedNotes.sort(Comparator.comparingInt(note -> (int) note.getAttribute(Note.DATE_KEY, new Date(0)).getTime()));
-                    final int size = sortedNotes.size();
-                    filteredNotes.addAll(sortedNotes.subList(size < count ? 0 : size - count, size));
-                    notesList.clear();
-                }
-                return filteredNotes;
-            }
-        };
-    }
-
-    public static NotesFilter latestOfSubject(final String subject, final int count) {
-        return new NotesFilter() {
-            private final NotesFilter notesFilter = new NotesFilter().subject(Utils.getSubject(subject));
-            @Override
-            public List<Note> filter(final List<Note> notes) {
-                final List<Note> mNotes = notesFilter.filter(notes);
-                mNotes.sort(Comparator.comparingInt(note -> (int) note.getAttribute(Note.DATE_KEY, new Date(0)).getTime()));
-                return mNotes.subList(mNotes.size() - count, mNotes.size());
-            }
-        }.subject(subject);
     }
 
     public NotesFilter headlineHas(final String value) {
@@ -117,6 +73,8 @@ public class NotesFilter {
         if (dateRule != null) {
             switch (dateRule) {
                 case LAST_SCHOOL_DAY:
+                    System.err.println("Filtering by LAST_SCHOOL_DAY lets all " +
+                            "notes through that are dated to the same day of week.");
                     final Calendar calendar = Calendar.getInstance();
                     calendar.setTime(note.getAttribute(Note.DATE_KEY, new Date()));
                     if (Utils.getLastSchoolDay().getValue() != calendar.get(Calendar.DAY_OF_WEEK)) {
@@ -137,9 +95,7 @@ public class NotesFilter {
         }
 
         if (timesViewed != -1 && timesViewedMatcher != null) {
-            if(!matchesTimesViewed(note.getAttribute(Note.VIEWED_KEY))) {
-                return false;
-            }
+            return matchesTimesViewed(note.getAttribute(Note.VIEWED_KEY));
         }
         return true;
     }

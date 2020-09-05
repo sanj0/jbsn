@@ -1,8 +1,11 @@
 package de.edgelord.jbsn.ui;
 
-import de.edgelord.jbsn.Main;
+import de.edgelord.jbsn.Notes;
 import de.edgelord.jbsn.Schedule;
 import de.edgelord.jbsn.Utils;
+import de.edgelord.jbsn.filter.LatestLessonsOfSubjectFilter;
+import de.edgelord.jbsn.filter.NotesFilter;
+import de.edgelord.jbsn.filter.NotesFilterDialog;
 
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
@@ -10,33 +13,18 @@ import java.awt.event.MouseEvent;
 import java.io.IOException;
 
 /**
- * A standard button for the ui.
- * It has text and an icon or only text or icon.
+ * A list of static methods to
+ * make buttons for the GreetingWindow
  */
-public class Button extends JButton {
+public class Buttons {
 
-    public Button(final String text, final Icon icon) {
-        if (icon == null) {
-            if (text == null) {
-                throw new IllegalArgumentException("Button has to either have text or an icon or both");
-            } else {
-                setText(text);
-            }
-        } else if (text == null) {
-            setIcon(icon);
-        } else {
-            setIcon(icon);
-            setText(text);
-        }
-    }
-
-    public static Button CREATE_NOTE_BUTTON() {
-        final Button b = new Button("+ new note", null);
+    public static JButton CREATE_NOTE_BUTTON() {
+        final JButton b = new JButton("+ new note");
         b.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(final MouseEvent e) {
                 try {
-                    Main.addNote();
+                    Notes.addNote();
                 } catch (IOException | InterruptedException ioException) {
                     ioException.printStackTrace();
                 }
@@ -45,8 +33,8 @@ public class Button extends JButton {
         return b;
     }
 
-    public static Button VIEW_ALL_NOTES() {
-        final Button b = new Button("view all notes", null);
+    public static JButton VIEW_ALL_NOTES() {
+        final JButton b = new JButton("view all notes");
         b.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(final MouseEvent e) {
@@ -57,8 +45,8 @@ public class Button extends JButton {
         return b;
     }
 
-    public static Button VIEW_FILTERED_NOTES() {
-        final Button b = new Button("view filtered notes", null);
+    public static JButton VIEW_FILTERED_NOTES() {
+        final JButton b = new JButton("view filtered notes");
         b.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(final MouseEvent e) {
@@ -72,12 +60,12 @@ public class Button extends JButton {
         return b;
     }
 
-    public static Button VIEW_NOTES_FOR_NEXT_SCHOOL_DAY() {
-        final Button b = new Button("<html><center>view notes for<br />next school day</center></html>", null);
+    public static JButton VIEW_NOTES_FOR_NEXT_SCHOOL_DAY() {
+        final JButton b = new JButton("<html><center>view notes for<br />next school day</center></html>");
         b.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(final MouseEvent e) {
-                new NotesListWindow(NotesFilter.latestBySubjects(Schedule.getScheduleByDayOfWeek(Utils.getNextSchoolDay()), 2));
+                new NotesListWindow(new LatestLessonsOfSubjectFilter(Schedule.getScheduleByDayOfWeek(Utils.getNextSchoolDay()), 2));
             }
         });
 

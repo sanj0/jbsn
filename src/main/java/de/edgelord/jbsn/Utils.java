@@ -1,6 +1,6 @@
 package de.edgelord.jbsn;
 
-import de.edgelord.jbsn.ui.NotesFilter;
+import de.edgelord.jbsn.filter.NotesFilter;
 import de.edgelord.jbsn.ui.NotesListWindow;
 import de.edgelord.jbsn.ui.TableSupply;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
@@ -11,21 +11,22 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
 import java.time.Instant;
-import java.util.*;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
+import java.util.*;
 import java.util.function.Consumer;
 
+/**Bin for all static util methods*/
 public class Utils {
 
+    public static final String[] COLUMNS = new String[]{"subject", "headline", "date", "times viewed"};
     private static final DateFormat DATE_FORMAT = new SimpleDateFormat("EE dd.MM.yyyy", Locale.GERMANY);
-
-    private static String[] SUBJECTS;
-    private static Map<String, String> SUBJECT_MAP = new HashMap<>();
-
-    public static final String[] COLUMNS = new String[] {"subject", "headline", "date", "times viewed"};
+    private static final String[] SUBJECTS;
+    private static final Map<String, String> SUBJECT_MAP = new HashMap<>();
 
     static {
-        final String[] subjectMappings = Main.APP_CONFIGS.getSubjects().split(",");
+        final String[] subjectMappings = AppConfigManager.APP_CONFIG.getSubjects().split(",");
         SUBJECTS = new String[subjectMappings.length];
 
         int i = 0;
@@ -38,8 +39,28 @@ public class Utils {
         Arrays.sort(SUBJECTS, java.text.Collator.getInstance());
     }
 
-    public static void openPreferences() {
+    public static void placeholderHere(final Container component, final int count) {
+        for (int i = 0; i < count; i++) {
+            component.add(Box.createGlue());
+        }
+    }
 
+    public static String toHFSPath(final String posixPath) {
+        if (posixPath.startsWith("/")) {
+            return posixPath.substring(1).replaceAll("/", ":");
+        } else {
+            return posixPath.replaceAll("/", ":");
+        }
+    }
+
+    public static boolean isSameDay(final Date aDate, final Date anotherDate) {
+        final LocalDate localDate1 = aDate.toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate();
+        final LocalDate localDate2 = anotherDate.toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate();
+        return localDate1.isEqual(localDate2);
     }
 
     public static DayOfWeek getNextSchoolDay() {
@@ -48,8 +69,8 @@ public class Utils {
             return DayOfWeek.MONDAY;
         } else {
             // DayOfWeek starts at 1 while the Calender
-            // values start at 0. API are not really compatible,
-            // but I don't want to refactor the code,
+            // values start at 0. Hence APIs are not really
+            // compatible, but I don't want to refactor the code,
             // so this ugly line exists, where the next
             // day is value-equal to the current day
             // but the next day because Calender constants
@@ -98,7 +119,7 @@ public class Utils {
         int i = 0;
         for (int row : selectedRows) {
             final String[] noteData = TableSupply.getDATA().get(list).getData().get(row);
-            final Note note = Main.getNote(noteData[0], noteData[2], noteData[1]);
+            final Note note = Notes.getNote(noteData[0], noteData[2], noteData[1]);
             selectedNotes[i] = note;
             i++;
         }
@@ -115,7 +136,7 @@ public class Utils {
 
         int i = 0;
         for (final Note n : notes) {
-            data[i] = new String[] {
+            data[i] = new String[]{
                     n.getSubject(),
                     n.getAttribute(Note.HEADLINE_KEY),
                     Utils.dateToString(n.getAttribute(Note.DATE_KEY)),
@@ -167,19 +188,19 @@ public class Utils {
     public static boolean showDeleteConfirmDialog(final Note[] notes) {
         if (notes.length == 1) {
             String message = "Do you really want to delete the note of subject " + notes[0].getSubject()
-                    + " from " + Utils.dateToString(notes[0].getAttribute(Note.DATE_KEY)) + " (the actual document file stays untouched)?";
+                    + " from " + Utils.dateToString(notes[0].getAttribute(Note.DATE_KEY)) + "?";
             String title = "Confirm deletion of note \"" + notes[0].getAttribute(Note.HEADLINE_KEY) + "\"?";
             return JOptionPane.showConfirmDialog(null, message, title,
-                            JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION;
+                    JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION;
         } else if (notes.length != 0) {
             final Set<String> subjects = new HashSet<>();
             for (final Note n : notes) {
                 subjects.add(n.getSubject());
             }
-            String message = "Do you really want to delete " + notes.length + " notes of " + subjects.size() + " subjects (the actual document files stay untouched)?";
+            String message = "Do you really want to delete " + notes.length + " notes of " + subjects.size() + " subjects?";
             String title = "Confirm deletion of " + notes.length + " notes?";
             return JOptionPane.showConfirmDialog(null, message, title,
-                            JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION;
+                    JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION;
         }
 
         return false;
