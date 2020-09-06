@@ -3,7 +3,8 @@ package de.edgelord.jbsn.filter;
 import de.edgelord.jbsn.Note;
 import de.edgelord.jbsn.Utils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 // matches all
 public class NotesFilter {
@@ -14,7 +15,7 @@ public class NotesFilter {
     private int timesViewed = -1;
     private TimesViewedMatcher timesViewedMatcher = null;
 
-    protected NotesFilter() {
+    public NotesFilter() {
     }
 
     /**
@@ -73,13 +74,6 @@ public class NotesFilter {
         if (dateRule != null) {
             switch (dateRule) {
                 case LAST_SCHOOL_DAY:
-                    System.err.println("Filtering by LAST_SCHOOL_DAY lets all " +
-                            "notes through that are dated to the same day of week.");
-                    final Calendar calendar = Calendar.getInstance();
-                    calendar.setTime(note.getAttribute(Note.DATE_KEY, new Date()));
-                    if (Utils.getLastSchoolDay().getValue() != calendar.get(Calendar.DAY_OF_WEEK)) {
-                        return false;
-                    }
                     break;
                 case TODAY:
                     break;

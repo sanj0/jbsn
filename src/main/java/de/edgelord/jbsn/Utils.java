@@ -7,36 +7,37 @@ import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 import javax.swing.*;
 import java.awt.*;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
-import java.time.Instant;
 import java.time.LocalDate;
-import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.*;
 import java.util.function.Consumer;
 
-/**Bin for all static util methods*/
+/**
+ * Bin for all static util methods
+ */
 public class Utils {
 
     public static final String[] COLUMNS = new String[]{"subject", "headline", "date", "times viewed"};
-    private static final DateFormat DATE_FORMAT = new SimpleDateFormat("EE dd.MM.yyyy", Locale.GERMANY);
-    private static final String[] SUBJECTS;
+    private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("EE dd.MM.yyy", Locale.GERMANY);
     private static final Map<String, String> SUBJECT_MAP = new HashMap<>();
+    private static final String[] SUBJECTS = readSubjects();
 
-    static {
+    private static String[] readSubjects() {
         final String[] subjectMappings = AppConfigManager.APP_CONFIG.getSubjects().split(",");
-        SUBJECTS = new String[subjectMappings.length];
+        final String[] subjects = new String[subjectMappings.length];
 
         int i = 0;
         for (final String s : subjectMappings) {
             final String[] parts = s.split(":");
-            SUBJECTS[i] = parts[1];
+            subjects[i] = parts[1];
             SUBJECT_MAP.put(parts[0], parts[1]);
             i++;
         }
-        Arrays.sort(SUBJECTS, java.text.Collator.getInstance());
+        Arrays.sort(subjects, java.text.Collator.getInstance());
+
+        return subjects;
     }
 
     public static void placeholderHere(final Container component, final int count) {
@@ -53,14 +54,8 @@ public class Utils {
         }
     }
 
-    public static boolean isSameDay(final Date aDate, final Date anotherDate) {
-        final LocalDate localDate1 = aDate.toInstant()
-                .atZone(ZoneId.systemDefault())
-                .toLocalDate();
-        final LocalDate localDate2 = anotherDate.toInstant()
-                .atZone(ZoneId.systemDefault())
-                .toLocalDate();
-        return localDate1.isEqual(localDate2);
+    public static boolean isSameDay(final LocalDate aDate, final LocalDate anotherDate) {
+        return aDate.isEqual(anotherDate);
     }
 
     public static DayOfWeek getNextSchoolDay() {
@@ -206,15 +201,11 @@ public class Utils {
         return false;
     }
 
-    public static Date today() {
-        return Date.from(Instant.now());
+    public static LocalDate today() {
+        return LocalDate.now();
     }
 
-    public static String quote(final String s) {
-        return "'" + s + "'";
-    }
-
-    public static String dateToString(final Date date) {
-        return DATE_FORMAT.format(date);
+    public static String dateToString(final LocalDate date) {
+        return date.format(DATE_FORMAT);
     }
 }

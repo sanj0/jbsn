@@ -1,6 +1,10 @@
 package de.edgelord.jbsn;
 
-import java.util.Date;
+import de.edgelord.jbsn.filter.NotesFilter;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A timestamp is used to mark a specific point
@@ -15,10 +19,39 @@ import java.util.Date;
 public class Timestamp {
 
     private final String subject;
-    private final Date date;
+    private final LocalDate date;
 
-    public Timestamp(String subject, Date date) {
+    public Timestamp(final String subject, final LocalDate date) {
         this.subject = subject;
         this.date = date;
+    }
+
+    /**
+     * @return a filter that only lets notes through
+     * with the given {@link #subject} and dated after
+     * the given {@link #date}
+     */
+    public NotesFilter filter() {
+        return new NotesFilter() {
+            @Override
+            public List<Note> filter(List<Note> notes) {
+                final List<Note> filteredNotes = new ArrayList<>();
+
+                for (final Note n : notes) {
+                    if (n.getSubject().equals(subject)) {
+
+                    }
+                }
+                return filteredNotes;
+            }
+        };
+    }
+
+    public String getSubject() {
+        return subject;
+    }
+
+    public LocalDate getDate() {
+        return date;
     }
 }

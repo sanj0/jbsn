@@ -1,6 +1,6 @@
 package de.edgelord.jbsn;
 
-import java.io.*;
+import java.io.IOException;
 
 // jbsn = Just better school notes
 public class Main {

@@ -24,7 +24,7 @@ public class Buttons {
             @Override
             public void mouseClicked(final MouseEvent e) {
                 try {
-                    Notes.addNote();
+                    Notes.newNote(b.getParent());
                 } catch (IOException | InterruptedException ioException) {
                     ioException.printStackTrace();
                 }

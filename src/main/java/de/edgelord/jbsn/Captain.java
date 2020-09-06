@@ -4,7 +4,9 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 
-/**The captain always leaves a sinking last!*/
+/**
+ * The captain always leaves a sinking last!
+ */
 public class Captain extends Thread {
     @Override
     public void run() {

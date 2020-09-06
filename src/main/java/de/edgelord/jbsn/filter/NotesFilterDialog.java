@@ -1,7 +1,6 @@
 package de.edgelord.jbsn.filter;
 
 import de.edgelord.jbsn.Utils;
-import de.edgelord.jbsn.filter.NotesFilter;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,7 +9,7 @@ import java.util.Map;
 
 public class NotesFilterDialog {
 
-    private static Map<String, NotesFilter.DateRule> dateRuleMap = createDateRulesMap();
+    private static final Map<String, NotesFilter.DateRule> dateRuleMap = createDateRulesMap();
 
     public static NotesFilter prompt(final Component parent) {
         final JTextField headline = new JTextField();

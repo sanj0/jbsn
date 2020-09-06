@@ -3,7 +3,11 @@ package de.edgelord.jbsn.filter;
 import de.edgelord.jbsn.Note;
 import de.edgelord.jbsn.Utils;
 
-import java.util.*;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class LatestLessonsOfSubjectFilter extends NotesFilter {
 
@@ -18,7 +22,7 @@ public class LatestLessonsOfSubjectFilter extends NotesFilter {
     @Override
     public List<Note> filter(List<Note> notes) {
         final List<Note> filteredNotes = new ArrayList<>();
-        final Map<String, List<Date>> lessons = new HashMap<>();
+        final Map<String, List<LocalDate>> lessons = new HashMap<>();
 
         subjects.forEach(s -> lessons.put(s, new ArrayList<>()));
 
@@ -27,9 +31,9 @@ public class LatestLessonsOfSubjectFilter extends NotesFilter {
         for (final Note n : notes) {
             final String subject = n.getSubject();
             if (subjects.contains(subject)) {
-                final List<Date> lessonsOfSubject = lessons.get(subject);
+                final List<LocalDate> lessonsOfSubject = lessons.get(subject);
                 boolean containsLesson = false;
-                for (final Date d : lessonsOfSubject) {
+                for (final LocalDate d : lessonsOfSubject) {
                     if (Utils.isSameDay(d, n.getAttribute(Note.DATE_KEY))) {
                         containsLesson = true;
                         break;

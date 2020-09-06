@@ -5,7 +5,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.Date;
+import java.time.LocalDate;
 
 /**
  * A note, loaded from a .jb file,
@@ -33,7 +33,7 @@ public class Note extends Configurations {
         setPreserveOrder(true);
     }
 
-    public Note(final String headline, final String subject, final Date date, final int viewed, final String relativePathOfNote) {
+    public Note(final String headline, final String subject, final LocalDate date, final int viewed, final String relativePathOfNote) {
         super();
 
         setAttribute(HEADLINE_KEY, headline);
@@ -44,7 +44,8 @@ public class Note extends Configurations {
         setPreserveOrder(true);
     }
 
-    public static Note createNote(final String headline, final String subject, final Date date) throws IOException, InterruptedException {
+    public static Note createNote(final String headline, final String subject, final LocalDate date)
+            throws IOException, InterruptedException {
         final Note note = new Note(headline, subject, date, 0,
                 Notes.createdNoteFile(subject, date, headline));
         note.setConfigFile(new File(AppConfigManager.APP_CONFIG.getNotesDir(),
@@ -83,7 +84,11 @@ public class Note extends Configurations {
     public Object readAttribute(final String key, final String value) {
         switch (key) {
             case DATE_KEY:
-                return new Date(Long.parseLong(value));
+                final String[] dateParts = value.split("\\.", 3);
+                final int year = Integer.parseInt(dateParts[2]);
+                final int month = Integer.parseInt(dateParts[1]);
+                final int day = Integer.parseInt(dateParts[0]);
+                return LocalDate.of(year, month, day);
 
             case VIEWED_KEY:
                 return Integer.parseInt(value);
@@ -102,8 +107,8 @@ public class Note extends Configurations {
     public String writeAttribute(final String key, final Object value) {
         switch (key) {
             case DATE_KEY:
-                final Date date = (Date) value;
-                return String.valueOf(date.getTime());
+                final LocalDate date = (LocalDate) value;
+                return date.getDayOfMonth() + "." + date.getMonthValue() + "." + date.getYear();
 
             case VIEWED_KEY:
                 return String.valueOf((int) value);

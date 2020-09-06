@@ -6,8 +6,8 @@ import java.awt.*;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class Notes {
@@ -45,8 +45,8 @@ public class Notes {
         return null;
     }
 
-    public static void addNote() throws IOException, InterruptedException {
-        String[] params = Utils.notesDialog(null);
+    public static void newNote(final Container parent) throws IOException, InterruptedException {
+        String[] params = Utils.notesDialog(parent);
         if (params != null) {
             final Note note = Note.createNote(params[1], params[0], Utils.today());
             NOTES.add(note);
@@ -80,7 +80,7 @@ public class Notes {
      *
      * @return the name of the new note file
      */
-    public static String createdNoteFile(final String subject, final Date date,
+    public static String createdNoteFile(final String subject, final LocalDate date,
                                          final String headline) throws IOException, InterruptedException {
         final File file = getNextNotesSourceFile();
         final String absolutePathHFS = Utils.toHFSPath(file.getAbsolutePath());
