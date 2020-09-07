@@ -39,7 +39,9 @@ public class Timestamp {
 
                 for (final Note n : notes) {
                     if (n.getSubject().equals(subject)) {
-
+                        if (n.getAttribute(Note.DATE_KEY, LocalDate.now()).isAfter(date)) {
+                            filteredNotes.add(n);
+                        }
                     }
                 }
                 return filteredNotes;
