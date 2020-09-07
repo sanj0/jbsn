@@ -17,6 +17,7 @@ public class ElementConfig extends Configurations {
     public static final String DATE_KEY = "date";
     public static final String VIEWED_KEY = "viewed";
     public static final String NOTES_FILE_KEY = "notesFile";
+    public static final String NAME_KEY = "name";
 
     private File configFile;
 
@@ -74,6 +75,7 @@ public class ElementConfig extends Configurations {
                 return new File(String.format(value, AppConfigManager.APP_CONFIG.getNotesSourcesDir()));
             case HEADLINE_KEY:
             case SUBJECT_KEY:
+            case NAME_KEY:
 
             default:
                 return value;
@@ -94,6 +96,7 @@ public class ElementConfig extends Configurations {
                 return file.getPath().replaceFirst(AppConfigManager.APP_CONFIG.getNotesSourcesDir(), "%s");
             case HEADLINE_KEY:
             case SUBJECT_KEY:
+            case NAME_KEY:
 
             default:
                 return value.toString();

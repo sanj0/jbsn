@@ -1,6 +1,8 @@
 package de.edgelord.jbsn.filter;
 
+import de.edgelord.jbsn.ElementConfig;
 import de.edgelord.jbsn.Note;
+import de.edgelord.jbsn.Timestamp;
 import de.edgelord.jbsn.Utils;
 
 import java.util.ArrayList;
@@ -10,8 +12,9 @@ import java.util.List;
 public class NotesFilter {
 
     private String headlineHas = null;
-    private DateRule dateRule = null;
     private String subject = null;
+    private Timestamp timestamp = null;
+    private DateRule dateRule = null;
     private int timesViewed = -1;
     private TimesViewedMatcher timesViewedMatcher = null;
 
@@ -37,6 +40,11 @@ public class NotesFilter {
 
     public NotesFilter subject(final String value) {
         setSubject(value);
+        return this;
+    }
+
+    public NotesFilter afterTimestamp(final Timestamp timestamp) {
+        setTimestamp(timestamp);
         return this;
     }
 
@@ -71,6 +79,13 @@ public class NotesFilter {
             }
         }
 
+        if (timestamp != null) {
+            if (!timestamp.getDate().isBefore(note.getAttribute(ElementConfig.DATE_KEY))
+                    && !timestamp.getDate().equals(note.getAttribute(ElementConfig.DATE_KEY))) {
+                return false;
+            }
+        }
+
         if (dateRule != null) {
             switch (dateRule) {
                 case LAST_SCHOOL_DAY:
@@ -89,7 +104,9 @@ public class NotesFilter {
         }
 
         if (timesViewed != -1 && timesViewedMatcher != null) {
-            return matchesTimesViewed(note.getAttribute(Note.VIEWED_KEY));
+            if (!matchesTimesViewed(note.getAttribute(Note.VIEWED_KEY))) {
+                return false;
+            }
         }
         return true;
     }
@@ -99,9 +116,9 @@ public class NotesFilter {
             case EQUALS:
                 return timesViewed == value;
             case GREATER_THAN:
-                return timesViewed > value;
+                return value > timesViewed;
             case LESS_THAN:
-                return timesViewed < value;
+                return value < timesViewed;
             default:
                 return false;
         }
@@ -159,6 +176,14 @@ public class NotesFilter {
      */
     public void setSubject(final String subject) {
         this.subject = subject;
+    }
+
+    public Timestamp getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(Timestamp timestamp) {
+        this.timestamp = timestamp;
     }
 
     /**

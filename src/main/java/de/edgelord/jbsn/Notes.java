@@ -27,10 +27,12 @@ public class Notes {
         final File[] notes = NOTES_DIR.listFiles(NOTES_SOURCES_FILTER);
         final File[] timestamps = TIMESTAMPS_DIR.listFiles(TIMESTAMPS_FILTER);
 
+        assert notes != null;
         for (final File file : notes) {
             NOTES.add(new Note(file));
         }
 
+        assert timestamps != null;
         for (final File file : timestamps) {
             TIMESTAMPS.add(new Timestamp(file));
         }
@@ -52,7 +54,16 @@ public class Notes {
                 return n;
             }
         }
+        return null;
+    }
 
+    public static Timestamp getTimestamp(final String name, final LocalDate date) {
+        for (final Timestamp t : TIMESTAMPS) {
+            if (t.getAttribute(ElementConfig.NAME_KEY).equals(name)
+                && t.getDate().equals(date)) {
+                return t;
+            }
+        }
         return null;
     }
 

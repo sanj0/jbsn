@@ -24,6 +24,8 @@ public class Utils {
     private static final Map<String, String> SUBJECT_MAP = new HashMap<>();
     private static final String[] SUBJECTS = readSubjects();
 
+    public static final String NO_TIMESTAMP = "No timestamp";
+
     private static String[] readSubjects() {
         final String[] subjectMappings = AppConfigManager.APP_CONFIG.getSubjects().split(",");
         final String[] subjects = new String[subjectMappings.length];
@@ -166,6 +168,16 @@ public class Utils {
         return subject;
     }
 
+    public static JComboBox<String> timestampComboBox() {
+        final List<String> timestamps = new ArrayList<>();
+        Notes.TIMESTAMPS.forEach(t -> timestamps.add(t.getAttribute(ElementConfig.NAME_KEY) + ", " +
+                Utils.stringFromDate(t.getDate()) + " (" + t.getSubject() + ")"));
+        timestamps.add(NO_TIMESTAMP);
+        final JComboBox<String> comboBox = new JComboBox<>(timestamps.toArray(new String[0]));
+        comboBox.setSelectedIndex(timestamps.size() - 1);
+        return comboBox;
+    }
+
     public static void notePicker(final NotesFilter filterRules, final Consumer<Note> action) {
         new NotesListWindow(filterRules) {
             @Override
@@ -195,14 +207,16 @@ public class Utils {
 
     public static Timestamp newTimestampDialog() {
         final JComboBox<String> subject = Utils.subjectComboBox(true);
+        final JTextField name = new JTextField();
         Object[] message = {
-                "Subject:", subject
+                "Subject:", subject,
+                "Name:", name
         };
 
         int option = JOptionPane.showConfirmDialog(null, message, "Add Timestamp", JOptionPane.OK_CANCEL_OPTION);
         if (option == JOptionPane.OK_OPTION) {
             final String subjectText = subject.getSelectedItem().equals("all") ? null : subject.getSelectedItem().toString();
-            return new Timestamp(subjectText, Utils.today());
+            return new Timestamp(subjectText, name.getText());
         } else {
             return null;
         }
