@@ -12,19 +12,30 @@ import java.util.List;
 
 public class Notes {
     public static final String NOTES_FILE_EXTENSION = "jb";
+    public static final String TIMESTAMPS_FILE_EXTENSION = "timestamp";
     public static final FileFilter NOTES_SOURCES_FILTER = pathname -> pathname.getName().endsWith("." + NOTES_FILE_EXTENSION);
+    public static final FileFilter TIMESTAMPS_FILTER = pathname -> pathname.getName().endsWith("." + TIMESTAMPS_FILE_EXTENSION);
     public static final List<Note> NOTES = new ArrayList<>();
+    public static final List<Timestamp> TIMESTAMPS = new ArrayList<>();
     public static File NOTES_SOURCES_DIR;
     public static File NOTES_DIR;
+    public static File TIMESTAMPS_DIR;
 
+    /**loads notes and timestamps from respective dirs*/
     static void loadNotes() throws IOException {
         final long startT = System.currentTimeMillis();
-        final File[] files = NOTES_DIR.listFiles(NOTES_SOURCES_FILTER);
+        final File[] notes = NOTES_DIR.listFiles(NOTES_SOURCES_FILTER);
+        final File[] timestamps = TIMESTAMPS_DIR.listFiles(TIMESTAMPS_FILTER);
 
-        for (final File file : files) {
+        for (final File file : notes) {
             NOTES.add(new Note(file));
         }
-        System.out.println("took " + (System.currentTimeMillis() - startT) / 1000f + "s to load " + NOTES.size() + " notes.");
+
+        for (final File file : timestamps) {
+            TIMESTAMPS.add(new Timestamp(file));
+        }
+        System.out.println("took " + (System.currentTimeMillis() - startT) / 1000f
+                + "s to load " + NOTES.size() + " notes and " + TIMESTAMPS.size() + " timestamps.");
     }
 
     public static void openNote(final Note note) throws IOException {
@@ -50,12 +61,19 @@ public class Notes {
         if (params != null) {
             final Note note = Note.createNote(params[1], params[0], Utils.today());
             NOTES.add(note);
-            note.write(new BufferedWriter(new FileWriter(note.getConfigFile())));
+            note.syncFile();
             TableSupply.update();
         }
     }
 
-    // preserves the actual document
+    public static void newTimestamp() throws IOException {
+        final Timestamp timestamp = Utils.newTimestampDialog();
+        timestamp.setConfigFile(getNextTimestampFile());
+        TIMESTAMPS.add(timestamp);
+        timestamp.syncFile();
+    }
+
+    // backups the actual document
     public static void removeNote(final Note n) throws IOException {
         final File copy = new File(AppConfigManager.APP_CONFIG.getRecentlyDeletedDir(), n.getAttribute(Note.HEADLINE_KEY, "").replaceAll("/[<>:\"/|?*]/", "") + ".pages");
         copy.createNewFile();
@@ -66,9 +84,14 @@ public class Notes {
         TableSupply.update();
     }
 
+    /** syncs notes and timestamps*/
     public static void syncNotes() throws IOException {
         for (final Note n : NOTES) {
             n.syncFile();
+        }
+
+        for (final Timestamp t : TIMESTAMPS) {
+            t.syncFile();
         }
     }
 
@@ -94,5 +117,10 @@ public class Notes {
     // returns the abs path to the next notes source name
     private static File getNextNotesSourceFile() {
         return new File(AppConfigManager.APP_CONFIG.getNotesSourcesDir(), (NOTES.size() + ".pages"));
+    }
+
+    // returns the abs path to the next timestamps source name
+    private static File getNextTimestampFile() {
+        return new File(AppConfigManager.APP_CONFIG.getTimestampsDir(), (TIMESTAMPS.size() + ".timestamp"));
     }
 }
