@@ -14,8 +14,9 @@ public class AppConfigManager {
 
     static void configs() throws IOException {
         APP_CONFIG = new AppConfig(CONFIG);
-        Notes.NOTES_SOURCES_DIR = new File(String.format(APP_CONFIG.getNotesSourcesDir(), APP_CONFIG.getBaseDir()));
-        Notes.NOTES_DIR = new File(String.format(APP_CONFIG.getNotesDir(), APP_CONFIG.getBaseDir()));
+        Notes.NOTES_SOURCES_DIR = new File(APP_CONFIG.getNotesSourcesDir());
+        Notes.NOTES_DIR = new File(APP_CONFIG.getNotesDir());
+        Notes.TIMESTAMPS_DIR = new File(APP_CONFIG.getTimestampsDir());
 
         final int noteSourcesCount = Objects.requireNonNull(
                 Notes.NOTES_SOURCES_DIR.listFiles((dir, name) -> name.endsWith(".pages"))).length;

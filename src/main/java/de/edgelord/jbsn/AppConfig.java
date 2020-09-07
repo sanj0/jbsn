@@ -15,6 +15,7 @@ public class AppConfig extends Configurations {
     public static final String NOTES_DIR_KEY = "notes-dir";
     public static final String NOTES_SOURCES_DIR_KEY = "notes-sources-dir";
     public static final String TEMPLATE_SCRIPT_KEY = "template-script";
+    public static final String TIMESTAMPS_DIR_KEY = "timestamps-dir";
     public static final String RECENTLY_DELETED_DIR_KEY = "recently-deleted-dir";
     public static final String NAME_KEY = "name";
     public static final String SUBJECTS_KEY = "subjects";
@@ -47,6 +48,10 @@ public class AppConfig extends Configurations {
 
     public String getTemplateScript() {
         return String.format(getAttribute(TEMPLATE_SCRIPT_KEY, ""), getBaseDir());
+    }
+
+    public String getTimestampsDir() {
+        return String.format(getAttribute(TIMESTAMPS_DIR_KEY, ""), getBaseDir());
     }
 
     public String getRecentlyDeletedDir() {

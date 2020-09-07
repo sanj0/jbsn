@@ -40,6 +40,20 @@ public class Utils {
         return subjects;
     }
 
+    /**format: dd.MM.yyyy*/
+    public static LocalDate dateFromString(final String value) {
+        final String[] dateParts = value.split("\\.", 3);
+        final int year = Integer.parseInt(dateParts[2]);
+        final int month = Integer.parseInt(dateParts[1]);
+        final int day = Integer.parseInt(dateParts[0]);
+        return LocalDate.of(year, month, day);
+    }
+
+    /**format: dd.MM.yyyy*/
+    public static String stringFromDate(final LocalDate date) {
+        return date.getDayOfMonth() + "." + date.getMonthValue() + "." + date.getYear();
+    }
+
     public static void placeholderHere(final Container component, final int count) {
         for (int i = 0; i < count; i++) {
             component.add(Box.createGlue());
@@ -149,7 +163,6 @@ public class Utils {
             subject.addItem("all");
             subject.setSelectedItem("all");
         }
-        //AutoCompleteDecorator.decorate(subject);
         return subject;
     }
 
@@ -175,6 +188,21 @@ public class Utils {
             String subjectText = (String) subject.getSelectedItem();
             subjectText = getSubject(subjectText);
             return new String[]{subjectText, headline.getText()};
+        } else {
+            return null;
+        }
+    }
+
+    public static Timestamp newTimestampDialog() {
+        final JComboBox<String> subject = Utils.subjectComboBox(true);
+        Object[] message = {
+                "Subject:", subject
+        };
+
+        int option = JOptionPane.showConfirmDialog(null, message, "Add Timestamp", JOptionPane.OK_CANCEL_OPTION);
+        if (option == JOptionPane.OK_OPTION) {
+            final String subjectText = subject.getSelectedItem().equals("all") ? null : subject.getSelectedItem().toString();
+            return new Timestamp(subjectText, Utils.today());
         } else {
             return null;
         }

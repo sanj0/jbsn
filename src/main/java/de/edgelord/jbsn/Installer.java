@@ -26,11 +26,12 @@ public class Installer {
             final BufferedReader configsReader = new BufferedReader(configsStream);
             AppConfigManager.APP_CONFIG = new AppConfig(new BufferedReader(new InputStreamReader(Objects.requireNonNull(Installer.class.getClassLoader().getResourceAsStream("config.txt")))));
             final boolean baseDirCreated = new File(AppConfigManager.APP_CONFIG.getBaseDir()).mkdirs();
-            final boolean notesDirCreated = new File(AppConfigManager.APP_CONFIG.getNotesDir()).mkdir();
-            final boolean noteSourcesDirCreated = new File(AppConfigManager.APP_CONFIG.getNotesSourcesDir()).mkdir();
-            final boolean recentlyDeletedDirCreated = new File(AppConfigManager.APP_CONFIG.getRecentlyDeletedDir()).mkdir();
+            final boolean notesDirCreated = new File(AppConfigManager.APP_CONFIG.getNotesDir()).mkdirs();
+            final boolean noteSourcesDirCreated = new File(AppConfigManager.APP_CONFIG.getNotesSourcesDir()).mkdirs();
+            final boolean timestampsDirCreated = new File(AppConfigManager.APP_CONFIG.getTimestampsDir()).mkdirs();
+            final boolean recentlyDeletedDirCreated = new File(AppConfigManager.APP_CONFIG.getRecentlyDeletedDir()).mkdirs();
             final boolean templateScriptDorCreated = new File(AppConfigManager.APP_CONFIG.getTemplateScript())
-                    .getParentFile().mkdir();
+                    .getParentFile().mkdirs();
             // copy script file
             copyFromResourcesToFile("scripts/pages.scpt", AppConfigManager.APP_CONFIG.getTemplateScript());
             // copy config file

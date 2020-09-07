@@ -2,6 +2,9 @@ package de.edgelord.jbsn;
 
 import de.edgelord.jbsn.filter.NotesFilter;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,20 +19,27 @@ import java.util.List;
  * (-> after the last class test), to see
  * what's relevant for the next timestamp.
  */
-public class Timestamp {
-
-    private final String subject;
-    private final LocalDate date;
+public class Timestamp extends ElementConfig {
 
     public Timestamp(final String subject, final LocalDate date) {
-        this.subject = subject;
-        this.date = date;
+        super();
+        setAttribute(SUBJECT_KEY, subject);
+        setAttribute(DATE_KEY, date);
+    }
+
+    /**
+     * A constructor.
+     *
+     * @param file the file of the note
+     */
+    public Timestamp(final File file) throws IOException {
+        super(file);
     }
 
     /**
      * @return a filter that only lets notes through
-     * with the given {@link #subject} and dated after
-     * the given {@link #date}
+     * with the given subject and dated after
+     * the given date.
      */
     public NotesFilter filter() {
         return new NotesFilter() {
@@ -38,7 +48,9 @@ public class Timestamp {
                 final List<Note> filteredNotes = new ArrayList<>();
 
                 for (final Note n : notes) {
-                    if (n.getSubject().equals(subject)) {
+                    final String subject = n.getSubject();
+                    final LocalDate date = getDate();
+                    if (subject == null || n.getSubject().equals(subject)) {
                         if (n.getAttribute(Note.DATE_KEY, LocalDate.now()).isAfter(date)) {
                             filteredNotes.add(n);
                         }
@@ -49,11 +61,7 @@ public class Timestamp {
         };
     }
 
-    public String getSubject() {
-        return subject;
-    }
-
     public LocalDate getDate() {
-        return date;
+        return getAttribute(DATE_KEY);
     }
 }

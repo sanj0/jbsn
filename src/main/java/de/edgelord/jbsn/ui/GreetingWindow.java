@@ -82,14 +82,21 @@ public class GreetingWindow extends JFrame {
         public boolean dispatchKeyEvent(KeyEvent e) {
             if (e.getID() == KeyEvent.KEY_PRESSED) {
                 if (e.getKeyCode() == KeyEvent.VK_N && e.isMetaDown()) {
-                    try {
-                        Notes.newNote(GreetingWindow.this);
-                    } catch (IOException | InterruptedException ioException) {
-                        ioException.printStackTrace();
+                    if (e.isShiftDown()) {
+                        try {
+                            Notes.newTimestamp();
+                        } catch (IOException ioException) {
+                            ioException.printStackTrace();
+                        }
+                    } else {
+                        try {
+                            Notes.newNote(GreetingWindow.this);
+                        } catch (IOException | InterruptedException ioException) {
+                            ioException.printStackTrace();
+                        }
                     }
                 }
             }
-
             return false;
         }
     }

@@ -1,7 +1,8 @@
 base-dir: /Users/edgelord/jbsn
-template-script: %s/scripts/pages.scpt
 notes-dir: %s/notes
 notes-sources-dir: %s/notes_sources
+template-script: %s/scripts/pages.scpt
+timestamps-dir: %s/timestamps
 recently-deleted-dir: %s/recently_deleted
 name: Malte Dostal
 subjects: d:Deutsch,m:Mathematik,e:Englisch,i:Informatik,ph:Physik,w:Wirtschaft,g:Geschichte,s:Sozialkunde,sp:Sport,r:Religion,k:Kunst,ps:P-Seminar,ws:W-Seminar,t:Theater
