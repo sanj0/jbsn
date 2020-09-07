@@ -1,10 +1,14 @@
 package de.edgelord.jbsn.ui;
 
+import de.edgelord.jbsn.Notes;
 import de.edgelord.jbsn.Utils;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.io.IOException;
 
 /**
  * A JFrame that contains four centred buttons
@@ -25,6 +29,13 @@ public class GreetingWindow extends JFrame {
 
         setLayout(new GridLayout(4, 4));
 
+        addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(final KeyEvent e) {
+                System.out.println("ping");
+            }
+        });
+
         //Add buttons and placeholders in order
         // to build the layout
         Utils.placeholderHere(this, 4);
@@ -35,12 +46,19 @@ public class GreetingWindow extends JFrame {
         add(notesForNextSchoolDayButton);
         Utils.placeholderHere(this, 5);
 
+        // make keyboard shortcuts possible
+        // without adding a listener to all
+        // component due to focus by adding
+        // a custom KeyEventDispatcher
+        KeyboardFocusManager.getCurrentKeyboardFocusManager()
+                .addKeyEventDispatcher(new KeyboardShortcutsDispatcher());
+
         pack();
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
     }
 
-    static class SettingsButtonPanel extends JPanel {
+    private class SettingsButtonPanel extends JPanel {
         public SettingsButtonPanel() {
             final JButton settingsButton = new JButton("<html><center>&#9881;<center></html>");
             settingsButton.setFont(getFont().deriveFont(35f));
@@ -56,6 +74,23 @@ public class GreetingWindow extends JFrame {
             setLayout(new GridLayout(2, 2));
             add(settingsButton);
             Utils.placeholderHere(this, 3);
+        }
+    }
+
+    private class KeyboardShortcutsDispatcher implements KeyEventDispatcher {
+        @Override
+        public boolean dispatchKeyEvent(KeyEvent e) {
+            if (e.getID() == KeyEvent.KEY_PRESSED) {
+                if (e.getKeyCode() == KeyEvent.VK_N && e.isMetaDown()) {
+                    try {
+                        Notes.newNote(GreetingWindow.this);
+                    } catch (IOException | InterruptedException ioException) {
+                        ioException.printStackTrace();
+                    }
+                }
+            }
+
+            return false;
         }
     }
 }

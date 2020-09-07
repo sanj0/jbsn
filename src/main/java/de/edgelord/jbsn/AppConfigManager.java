@@ -1,5 +1,7 @@
 package de.edgelord.jbsn;
 
+import de.edgelord.jbsn.ui.LookAndFeelSetter;
+
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
@@ -25,9 +27,8 @@ public class AppConfigManager {
         }
         Schedule.readFromConfig();
 
+        LookAndFeelSetter.setNimbusLookAndFeel();
         final UIDefaults defaults = UIManager.getLookAndFeelDefaults();
-        if (defaults.get("Table.alternateRowColor") == null) {
-            defaults.put("Table.alternateRowColor", new Color(240, 240, 240));
-        }
+        defaults.put("Table.alternateRowColor", new Color(100, 100, 135));
     }
 }
