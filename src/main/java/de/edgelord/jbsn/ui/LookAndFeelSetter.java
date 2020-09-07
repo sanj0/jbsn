@@ -6,8 +6,8 @@ import java.awt.*;
 public class LookAndFeelSetter {
 
     public static void setNimbusLookAndFeel() {
-        UIManager.put("control", new Color(128, 128, 128));
-        UIManager.put("info", new Color(128, 128, 128));
+        UIManager.put("control", new Color(52, 52, 52));
+        UIManager.put("info", new Color(90, 90, 90));
         UIManager.put("nimbusBase", new Color(18, 30, 49));
         UIManager.put("nimbusAlertYellow", new Color(248, 187, 0));
         UIManager.put("nimbusDisabledText", new Color(128, 128, 128));
