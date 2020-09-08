@@ -215,7 +215,7 @@ public class Utils {
 
         int option = JOptionPane.showConfirmDialog(null, message, "Add Timestamp", JOptionPane.OK_CANCEL_OPTION);
         if (option == JOptionPane.OK_OPTION) {
-            final String subjectText = subject.getSelectedItem().equals("all") ? null : subject.getSelectedItem().toString();
+            final String subjectText = subject.getSelectedItem().toString();
             return new Timestamp(subjectText, name.getText());
         } else {
             return null;

@@ -79,9 +79,11 @@ public class Notes {
 
     public static void newTimestamp() throws IOException {
         final Timestamp timestamp = Utils.newTimestampDialog();
-        timestamp.setConfigFile(getNextTimestampFile());
-        TIMESTAMPS.add(timestamp);
-        timestamp.syncFile();
+        if (timestamp != null) {
+            timestamp.setConfigFile(getNextTimestampFile());
+            TIMESTAMPS.add(timestamp);
+            timestamp.syncFile();
+        }
     }
 
     // backups the actual document
