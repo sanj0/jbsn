@@ -91,7 +91,9 @@ public class NotesFilter {
                 case LAST_SCHOOL_DAY:
                     break;
                 case TODAY:
-                    break;
+                    if (!Utils.today().equals(note.getAttribute(ElementConfig.DATE_KEY))) {
+                        return false;
+                    }
                 case LAST_WEEK:
                     break;
                 case THIS_WEEK:
