@@ -20,11 +20,10 @@ import java.util.function.Consumer;
 public class Utils {
 
     public static final String[] COLUMNS = new String[]{"subject", "headline", "date", "times viewed"};
+    public static final String NO_TIMESTAMP = "No timestamp";
     private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("EE dd.MM.yyy", Locale.GERMANY);
     private static final Map<String, String> SUBJECT_MAP = new HashMap<>();
     private static final String[] SUBJECTS = readSubjects();
-
-    public static final String NO_TIMESTAMP = "No timestamp";
 
     private static String[] readSubjects() {
         final String[] subjectMappings = AppConfigManager.APP_CONFIG.getSubjects().split(",");
@@ -42,7 +41,9 @@ public class Utils {
         return subjects;
     }
 
-    /**format: dd.MM.yyyy*/
+    /**
+     * format: dd.MM.yyyy
+     */
     public static LocalDate dateFromString(final String value) {
         final String[] dateParts = value.split("\\.", 3);
         final int year = Integer.parseInt(dateParts[2]);
@@ -51,7 +52,9 @@ public class Utils {
         return LocalDate.of(year, month, day);
     }
 
-    /**format: dd.MM.yyyy*/
+    /**
+     * format: dd.MM.yyyy
+     */
     public static String stringFromDate(final LocalDate date) {
         return date.getDayOfMonth() + "." + date.getMonthValue() + "." + date.getYear();
     }

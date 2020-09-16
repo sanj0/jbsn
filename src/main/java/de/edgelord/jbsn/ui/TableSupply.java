@@ -21,12 +21,7 @@ public class TableSupply {
     private static NotesRowData rowData = new NotesRowData();
 
     public static JTable createClient(final NotesFilter filterRules) {
-        final JTable client = new JTable(new DefaultTableModel(Utils.COLUMNS, 0) {
-            @Override
-            public boolean isCellEditable(final int row, final int column) {
-                return false;
-            }
-        });
+        final JTable client = new JTable(new CustomTableModel());
         client.addKeyListener(new NotesListDeletionKeyListener());
         KeyStroke enter = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0);
         final String open = "Open";
@@ -46,6 +41,7 @@ public class TableSupply {
         });
         client.setFont(client.getFont().deriveFont(13f));
         addMatchingNotes(client, filterRules);
+        client.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
         CLIENTS.put(client, filterRules);
 
         return client;
@@ -105,5 +101,17 @@ public class TableSupply {
      */
     public static Map<JTable, NotesRowData> getDATA() {
         return DATA;
+    }
+
+    static class CustomTableModel extends DefaultTableModel {
+
+        public CustomTableModel() {
+            super(Utils.COLUMNS, 0);
+        }
+
+        @Override
+        public boolean isCellEditable(final int row, final int column) {
+            return false;
+        }
     }
 }

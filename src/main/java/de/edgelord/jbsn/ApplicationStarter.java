@@ -1,10 +1,7 @@
 package de.edgelord.jbsn;
 
 import de.edgelord.jbsn.ui.GreetingWindow;
-import de.edgelord.jbsn.ui.LookAndFeelSetter;
 
-import javax.swing.*;
-import java.awt.*;
 import java.io.IOException;
 
 public class ApplicationStarter {

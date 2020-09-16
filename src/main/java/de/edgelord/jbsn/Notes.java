@@ -3,7 +3,9 @@ package de.edgelord.jbsn;
 import de.edgelord.jbsn.ui.TableSupply;
 
 import java.awt.*;
-import java.io.*;
+import java.io.File;
+import java.io.FileFilter;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
@@ -21,7 +23,9 @@ public class Notes {
     public static File NOTES_DIR;
     public static File TIMESTAMPS_DIR;
 
-    /**loads notes and timestamps from respective dirs*/
+    /**
+     * loads notes and timestamps from respective dirs
+     */
     static void loadNotes() throws IOException {
         final long startT = System.currentTimeMillis();
         final File[] notes = NOTES_DIR.listFiles(NOTES_SOURCES_FILTER);
@@ -60,7 +64,7 @@ public class Notes {
     public static Timestamp getTimestamp(final String name, final LocalDate date) {
         for (final Timestamp t : TIMESTAMPS) {
             if (t.getAttribute(ElementConfig.NAME_KEY).equals(name)
-                && t.getDate().equals(date)) {
+                    && t.getDate().equals(date)) {
                 return t;
             }
         }
@@ -97,7 +101,9 @@ public class Notes {
         TableSupply.update();
     }
 
-    /** syncs notes and timestamps*/
+    /**
+     * syncs notes and timestamps
+     */
     public static void syncNotes() throws IOException {
         for (final Note n : NOTES) {
             n.syncFile();
@@ -129,11 +135,21 @@ public class Notes {
 
     // returns the abs path to the next notes source name
     private static File getNextNotesSourceFile() {
-        return new File(AppConfigManager.APP_CONFIG.getNotesSourcesDir(), (NOTES.size() + ".pages"));
+        return nextFile(AppConfigManager.APP_CONFIG.getNotesSourcesDir(), NOTES.size(), ".pages");
     }
 
     // returns the abs path to the next timestamps source name
     private static File getNextTimestampFile() {
-        return new File(AppConfigManager.APP_CONFIG.getTimestampsDir(), (TIMESTAMPS.size() + ".timestamp"));
+        return nextFile(AppConfigManager.APP_CONFIG.getTimestampsDir(), TIMESTAMPS.size(), ".timestamp");
+    }
+
+    protected static File nextFile(final String parentDir, final int baseName, final String extensions) {
+        File file =  new File(parentDir, baseName + extensions);
+
+        for (int i = 0; file.exists(); i++) {
+            file = new File(parentDir, file.getName().replace(extensions, "." + i + extensions));
+        }
+
+        return file;
     }
 }

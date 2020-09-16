@@ -1,5 +1,5 @@
 #!/bin/bash
-$DIR=${pwd}
+DIR=`pwd`
 # check if default jbsn configs and notes
 # dir is a git repo and if so, pull and then push
 # to update local and remote before starting the client
@@ -8,11 +8,11 @@ function syncGit {
         echo "detected git repo at default location, updating..."
         cd ~/jbsn/
         git add .
-        git commit -m "automated commit at jbsn startup"
+        git commit -m "$1"
         git pull
         git push
     fi
 }
-syncGit
+syncGit "automated commit at jbsn startup"
 java -cp ~/jbsn/bin/jbsn.jar de.edgelord.jbsn.Main
-syncGit
+syncGit "automated commit at jbsn exit"
