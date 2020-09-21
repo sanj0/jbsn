@@ -33,6 +33,6 @@ public class Timestamp extends ElementConfig {
     }
 
     public LocalDate getDate() {
-        return getAttribute(DATE_KEY);
+        return ((FormattedDate)getAttribute(DATE_KEY)).getValue();
     }
 }

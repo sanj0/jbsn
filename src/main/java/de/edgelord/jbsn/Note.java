@@ -7,7 +7,7 @@ import java.time.LocalDate;
 /**
  * A note, loaded from a .jb file,
  * or created programmatically and then
- * saved to a File
+ * saved to a file
  */
 public class Note extends ElementConfig {
 
@@ -20,7 +20,7 @@ public class Note extends ElementConfig {
 
         setAttribute(HEADLINE_KEY, headline);
         setAttribute(SUBJECT_KEY, subject);
-        setAttribute(DATE_KEY, date);
+        setAttribute(DATE_KEY, new FormattedDate(date));
         setAttribute(VIEWED_KEY, viewed);
         setAttribute(NOTES_FILE_KEY, new File(AppConfigManager.APP_CONFIG.getNotesSourcesDir(), relativePathOfNote));
         setPreserveOrder(true);

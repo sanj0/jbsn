@@ -50,10 +50,10 @@ public class Notes {
         Desktop.getDesktop().open(note.getSourceFile());
     }
 
-    public static Note getNote(final String subject, final String date, final String headline) {
+    public static Note getNote(final String subject, final FormattedDate date, final String headline) {
         for (final Note n : NOTES) {
             if (n.getSubject().equals(Utils.getSubject(subject))
-                    && Utils.dateToString(n.getAttribute(Note.DATE_KEY)).equals(date)
+                    && n.getAttribute(Note.DATE_KEY).equals(date)
                     && n.getAttribute(Note.HEADLINE_KEY).equals(headline)) {
                 return n;
             }

@@ -10,11 +10,14 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class TableSupply {
+
+    public static final int DATE_COLUMN = 2;
 
     private static final Map<JTable, NotesFilter> CLIENTS = new HashMap<>();
     private static final Map<JTable, NotesRowData> DATA = new HashMap<>();
@@ -42,6 +45,7 @@ public class TableSupply {
         client.setFont(client.getFont().deriveFont(13f));
         addMatchingNotes(client, filterRules);
         client.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+        client.setAutoCreateRowSorter(true);
         CLIENTS.put(client, filterRules);
 
         return client;
@@ -62,7 +66,7 @@ public class TableSupply {
 
         NotesRowData rowData = new NotesRowData(Utils.rowData(filteredNotes));
         DATA.put(client, rowData);
-        for (String[] data : rowData.getData()) {
+        for (Object[] data : rowData.getData()) {
             tableModel.addRow(data);
         }
     }
@@ -112,6 +116,15 @@ public class TableSupply {
         @Override
         public boolean isCellEditable(final int row, final int column) {
             return false;
+        }
+
+        @Override
+        public Class<?> getColumnClass(final int columnIndex) {
+            if (columnIndex == DATE_COLUMN) {
+                return LocalDate.class;
+            } else {
+                return String.class;
+            }
         }
     }
 }

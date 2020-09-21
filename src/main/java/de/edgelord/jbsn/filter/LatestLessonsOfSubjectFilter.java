@@ -1,5 +1,6 @@
 package de.edgelord.jbsn.filter;
 
+import de.edgelord.jbsn.FormattedDate;
 import de.edgelord.jbsn.Note;
 import de.edgelord.jbsn.Utils;
 
@@ -34,7 +35,7 @@ public class LatestLessonsOfSubjectFilter extends NotesFilter {
                 final List<LocalDate> lessonsOfSubject = lessons.get(subject);
                 boolean containsLesson = false;
                 for (final LocalDate d : lessonsOfSubject) {
-                    if (Utils.isSameDay(d, n.getAttribute(Note.DATE_KEY))) {
+                    if (Utils.isSameDay(d, ((FormattedDate)n.getAttribute(Note.DATE_KEY)).getValue())) {
                         containsLesson = true;
                         break;
                     }
@@ -44,7 +45,7 @@ public class LatestLessonsOfSubjectFilter extends NotesFilter {
                     filteredNotes.add(n);
                 } else {
                     if (lessonsOfSubject.size() != days) {
-                        lessonsOfSubject.add(n.getAttribute(Note.DATE_KEY));
+                        lessonsOfSubject.add(((FormattedDate)n.getAttribute(Note.DATE_KEY)).getValue());
                         filteredNotes.add(n);
                     }
                 }

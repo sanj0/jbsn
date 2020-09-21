@@ -132,8 +132,9 @@ public class Utils {
         Note[] selectedNotes = new Note[selectedRows.length];
         int i = 0;
         for (int row : selectedRows) {
-            final String[] noteData = TableSupply.getDATA().get(list).getData().get(row);
-            final Note note = Notes.getNote(noteData[0], noteData[2], noteData[1]);
+            final Note note = Notes.getNote(list.getValueAt(row, 0).toString(),
+                    (FormattedDate) list.getValueAt(0, TableSupply.DATE_COLUMN),
+                    list.getValueAt(row, 1).toString());
             selectedNotes[i] = note;
             i++;
         }
@@ -145,15 +146,15 @@ public class Utils {
         return Arrays.asList(getSelectedNotes(list));
     }
 
-    public static String[][] rowData(final List<Note> notes) {
-        final String[][] data = new String[notes.size()][3];
+    public static Object[][] rowData(final List<Note> notes) {
+        final Object[][] data = new Object[notes.size()][3];
 
         int i = 0;
         for (final Note n : notes) {
-            data[i] = new String[]{
+            data[i] = new Object[]{
                     n.getSubject(),
                     n.getAttribute(Note.HEADLINE_KEY),
-                    Utils.dateToString(n.getAttribute(Note.DATE_KEY)),
+                    n.getAttribute(Note.DATE_KEY),
                     n.getAttribute(Note.VIEWED_KEY).toString()
             };
             i++;

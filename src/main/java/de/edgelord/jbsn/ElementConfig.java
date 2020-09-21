@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.time.LocalDate;
 
 /**
  * Configs for Notes and Timestamps
@@ -66,7 +65,7 @@ public class ElementConfig extends Configurations {
     public Object readAttribute(final String key, final String value) {
         switch (key) {
             case DATE_KEY:
-                return Utils.dateFromString(value);
+                return new FormattedDate(Utils.dateFromString(value));
 
             case VIEWED_KEY:
                 return Integer.parseInt(value);
@@ -86,7 +85,7 @@ public class ElementConfig extends Configurations {
     public String writeAttribute(final String key, final Object value) {
         switch (key) {
             case DATE_KEY:
-                return Utils.stringFromDate((LocalDate) value);
+                return Utils.stringFromDate(((FormattedDate) value).getValue());
 
             case VIEWED_KEY:
                 return String.valueOf((int) value);

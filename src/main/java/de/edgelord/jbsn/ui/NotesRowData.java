@@ -6,13 +6,13 @@ import java.util.List;
 
 public class NotesRowData {
 
-    private List<String[]> data;
+    private List<Object[]> data;
 
-    public NotesRowData(final String[][] data) {
+    public NotesRowData(final Object[][] data) {
         this.data = Arrays.asList(data);
     }
 
-    public NotesRowData(final List<String[]> data) {
+    public NotesRowData(final List<Object[]> data) {
         this.data = data;
     }
 
@@ -20,8 +20,8 @@ public class NotesRowData {
         this.data = new ArrayList<>();
     }
 
-    public String[][] exportData() {
-        return data.toArray(new String[0][0]);
+    public Object[][] exportData() {
+        return data.toArray(new Object[0][0]);
     }
 
     /**
@@ -29,7 +29,7 @@ public class NotesRowData {
      *
      * @return the value of {@link #data}
      */
-    public List<String[]> getData() {
+    public List<Object[]> getData() {
         return data;
     }
 
@@ -38,7 +38,7 @@ public class NotesRowData {
      *
      * @param data the new value of {@link #data}
      */
-    public void setData(final List<String[]> data) {
+    public void setData(final List<Object[]> data) {
         this.data = data;
     }
 }
