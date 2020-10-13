@@ -26,6 +26,9 @@ public class LatestLessonsOfSubjectFilter extends NotesFilter {
 
         subjects.forEach(s -> lessons.put(s, new ArrayList<>()));
 
+        // 1. sort notes into lists
+        // 2. sort
+
         // TODO: Make more efficient
         // e.g. containsLessons computing
         for (final Note n : notes) {

@@ -24,6 +24,8 @@ public class Utils {
     private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("EE dd.MM.yyy", Locale.GERMANY);
     private static final Map<String, String> SUBJECT_MAP = new HashMap<>();
     private static final String[] SUBJECTS = readSubjects();
+    private static String lastSubject = null;
+    private static boolean lastSubjectWasAll = false;
 
     private static String[] readSubjects() {
         final String[] subjectMappings = AppConfigManager.APP_CONFIG.getSubjects().split(",");
@@ -77,6 +79,28 @@ public class Utils {
         return aDate.isEqual(anotherDate);
     }
 
+    public static int rotateValue(final int value, final int shift, final int min, final int max) {
+        if (value + shift > max) {
+            return min + (shift - max + value);
+        } else {
+            return Math.max(min, value + shift);
+        }
+    }
+
+    /**
+     *
+     * @return the current day of week or the next school day,
+     * if the current day is not a school day
+     */
+    public static DayOfWeek getCurrentSchoolDay() {
+        int dayOfWeek = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
+        if (dayOfWeek >= Calendar.FRIDAY) {
+            return DayOfWeek.MONDAY;
+        } else {
+            return DayOfWeek.of(rotateValue(dayOfWeek, -1, 1, 7));
+        }
+    }
+
     public static DayOfWeek getNextSchoolDay() {
         int dayOfWeek = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
         if (dayOfWeek >= Calendar.FRIDAY) {
@@ -88,7 +112,7 @@ public class Utils {
             // so this ugly line exists, where the next
             // day is value-equal to the current day
             // but the next day because Calender constants
-            // and DayOfWeek values are value-shifted by
+            // and DayOfWeek values are shifted by
             // one.
             return DayOfWeek.of(dayOfWeek);
         }
@@ -106,25 +130,6 @@ public class Utils {
     public static String getSubject(final String subject) {
         final String s = subject.trim();
         return SUBJECT_MAP.getOrDefault(s, s);
-    }
-
-    public static String subjectPrompt(final Component parent) {
-        final JComboBox subject = new JComboBox(SUBJECTS);
-        AutoCompleteDecorator.decorate(subject);
-        Object[] message = {
-                "Subject:", subject,
-        };
-
-        int option = JOptionPane.showConfirmDialog(parent, message, "", JOptionPane.OK_CANCEL_OPTION);
-        if (option == JOptionPane.OK_OPTION) {
-            String subjectText = getSubject((String) subject.getSelectedItem());
-            if (subjectText.length() <= 2) {
-                subjectText = SUBJECT_MAP.getOrDefault(subjectText, subjectText);
-            }
-            return subjectText;
-        } else {
-            return null;
-        }
     }
 
     public static Note[] getSelectedNotes(final JTable list) {
@@ -166,8 +171,15 @@ public class Utils {
         final JComboBox<String> subject = new JComboBox<>(SUBJECTS);
         if (addAllOption) {
             subject.addItem("all");
-            subject.setSelectedItem("all");
+            if (lastSubjectWasAll) {
+                subject.setSelectedItem("all");
+            } else {
+                subject.setSelectedItem(lastSubject);
+            }
+        } else {
+            subject.setSelectedItem(lastSubject);
         }
+
         return subject;
     }
 
@@ -201,10 +213,19 @@ public class Utils {
         int option = JOptionPane.showConfirmDialog(parent, message, "Add Note", JOptionPane.OK_CANCEL_OPTION);
         if (option == JOptionPane.OK_OPTION) {
             String subjectText = (String) subject.getSelectedItem();
+            updateLastSubject(subjectText);
             subjectText = getSubject(subjectText);
             return new String[]{subjectText, headline.getText()};
         } else {
             return null;
+        }
+    }
+
+    public static void updateLastSubject(final String subject) {
+        if (subject == null || subject.equals("all")) {
+            lastSubjectWasAll = true;
+        } else {
+            lastSubject = subject;
         }
     }
 
@@ -219,6 +240,7 @@ public class Utils {
         int option = JOptionPane.showConfirmDialog(null, message, "Add Timestamp", JOptionPane.OK_CANCEL_OPTION);
         if (option == JOptionPane.OK_OPTION) {
             final String subjectText = subject.getSelectedItem().toString();
+            updateLastSubject(subjectText);
             return new Timestamp(subjectText, name.getText());
         } else {
             return null;

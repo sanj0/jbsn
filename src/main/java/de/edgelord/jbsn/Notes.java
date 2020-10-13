@@ -1,6 +1,7 @@
 package de.edgelord.jbsn;
 
 import de.edgelord.jbsn.ui.TableSupply;
+import org.w3c.dom.Element;
 
 import java.awt.*;
 import java.io.File;
@@ -10,6 +11,7 @@ import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class Notes {
@@ -40,8 +42,10 @@ public class Notes {
         for (final File file : timestamps) {
             TIMESTAMPS.add(new Timestamp(file));
         }
+
+        NOTES.sort(Comparator.comparing(ElementConfig::getDate).reversed());
         System.out.println("took " + (System.currentTimeMillis() - startT) / 1000f
-                + "s to load " + NOTES.size() + " notes and " + TIMESTAMPS.size() + " timestamps.");
+                + "s to load and sort " + NOTES.size() + " notes and " + TIMESTAMPS.size() + " timestamps.");
     }
 
     public static void openNote(final Note note) throws IOException {

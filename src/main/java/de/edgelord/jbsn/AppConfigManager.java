@@ -8,6 +8,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
 
+import static de.edgelord.jbsn.Utils.getCurrentSchoolDay;
+
 public class AppConfigManager {
     public static final File CONFIG = new File(System.getProperty("user.home"), "jbsn/config.txt");
     public static AppConfig APP_CONFIG;
@@ -31,5 +33,6 @@ public class AppConfigManager {
         LookAndFeelSetter.setNimbusLookAndFeel();
         final UIDefaults defaults = UIManager.getLookAndFeelDefaults();
         defaults.put("Table.alternateRowColor", new Color(100, 100, 135));
+        Utils.updateLastSubject(Schedule.getScheduleByDayOfWeek(getCurrentSchoolDay()).get(0));
     }
 }

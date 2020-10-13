@@ -58,6 +58,10 @@ public class ElementConfig extends Configurations {
         return Utils.getSubject(getAttribute(SUBJECT_KEY));
     }
 
+    public LocalDate getDate() {
+        return getAttribute(DATE_KEY);
+    }
+
     public File getSourceFile() {
         return getAttribute(NOTES_FILE_KEY);
     }

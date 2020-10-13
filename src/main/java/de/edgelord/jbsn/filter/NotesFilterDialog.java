@@ -36,6 +36,7 @@ public class NotesFilterDialog {
         if (option == JOptionPane.OK_OPTION) {
             final String headlineText = headline.getText().isEmpty() ? null : headline.getText();
             final String subjectText = subject.getSelectedItem().equals("all") ? null : subject.getSelectedItem().toString();
+            Utils.updateLastSubject(subjectText);
             final String[] timestampData = timestamp.getItemAt(timestamp.getSelectedIndex())
                     .split("\\(")[0].split(", ", 2);
             final Timestamp afterTimestamp = timestamp.getSelectedItem().equals(Utils.NO_TIMESTAMP)
