@@ -1,11 +1,11 @@
-package de.edgelord.jbsn.ui;
+package de.sanj0.jbsn.ui;
 
-import de.edgelord.jbsn.Notes;
-import de.edgelord.jbsn.Schedule;
-import de.edgelord.jbsn.Utils;
-import de.edgelord.jbsn.filter.LatestLessonsOfSubjectFilter;
-import de.edgelord.jbsn.filter.NotesFilter;
-import de.edgelord.jbsn.filter.NotesFilterDialog;
+import de.sanj0.jbsn.Notes;
+import de.sanj0.jbsn.Schedule;
+import de.sanj0.jbsn.Utils;
+import de.sanj0.jbsn.filter.LatestLessonsOfSubjectFilter;
+import de.sanj0.jbsn.filter.NotesFilter;
+import de.sanj0.jbsn.filter.NotesFilterDialog;
 
 import javax.swing.*;
 import java.awt.event.MouseAdapter;

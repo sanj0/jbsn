@@ -1,9 +1,9 @@
-package de.edgelord.jbsn.filter;
+package de.sanj0.jbsn.filter;
 
-import de.edgelord.jbsn.ElementConfig;
-import de.edgelord.jbsn.Note;
-import de.edgelord.jbsn.Timestamp;
-import de.edgelord.jbsn.Utils;
+import de.sanj0.jbsn.ElementConfig;
+import de.sanj0.jbsn.Note;
+import de.sanj0.jbsn.Timestamp;
+import de.sanj0.jbsn.Utils;
 
 import java.util.ArrayList;
 import java.util.List;

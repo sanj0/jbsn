@@ -1,6 +1,6 @@
-package de.edgelord.jbsn;
+package de.sanj0.jbsn;
 
-import de.edgelord.jbsn.ui.LookAndFeelSetter;
+import de.sanj0.jbsn.ui.LookAndFeelSetter;
 
 import javax.swing.*;
 import java.awt.*;
@@ -8,7 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
 
-import static de.edgelord.jbsn.Utils.getCurrentSchoolDay;
+import static de.sanj0.jbsn.Utils.getCurrentSchoolDay;
 
 public class AppConfigManager {
     public static final File CONFIG = new File(System.getProperty("user.home"), "jbsn/config.txt");

@@ -1,6 +1,6 @@
-package de.edgelord.jbsn.ui;
+package de.sanj0.jbsn.ui;
 
-import de.edgelord.jbsn.AppConfigManager;
+import de.sanj0.jbsn.AppConfigManager;
 
 import javax.swing.*;
 import java.awt.*;

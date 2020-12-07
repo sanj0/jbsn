@@ -1,7 +1,6 @@
-package de.edgelord.jbsn;
+package de.sanj0.jbsn;
 
-import de.edgelord.jbsn.ui.TableSupply;
-import org.w3c.dom.Element;
+import de.sanj0.jbsn.ui.TableSupply;
 
 import java.awt.*;
 import java.io.File;

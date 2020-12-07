@@ -1,6 +1,6 @@
-package de.edgelord.jbsn;
+package de.sanj0.jbsn;
 
-import de.edgelord.jbsn.ui.GreetingWindow;
+import de.sanj0.jbsn.ui.GreetingWindow;
 
 import java.io.IOException;
 
