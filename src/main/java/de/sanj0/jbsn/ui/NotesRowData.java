@@ -1,4 +1,4 @@
-package de.edgelord.jbsn.ui;
+package de.sanj0.jbsn.ui;
 
 import java.util.ArrayList;
 import java.util.Arrays;

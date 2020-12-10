@@ -1,7 +1,7 @@
-package de.edgelord.jbsn.filter;
+package de.sanj0.jbsn.filter;
 
-import de.edgelord.jbsn.Note;
-import de.edgelord.jbsn.Utils;
+import de.sanj0.jbsn.Note;
+import de.sanj0.jbsn.Utils;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

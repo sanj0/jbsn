@@ -1,9 +1,8 @@
-package de.edgelord.jbsn;
+package de.sanj0.jbsn;
 
-import de.edgelord.jbsn.filter.NotesFilter;
-import de.edgelord.jbsn.ui.NotesListWindow;
-import de.edgelord.jbsn.ui.TableSupply;
-import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
+import de.sanj0.jbsn.filter.NotesFilter;
+import de.sanj0.jbsn.ui.NotesListWindow;
+import de.sanj0.jbsn.ui.TableSupply;
 
 import javax.swing.*;
 import java.awt.*;

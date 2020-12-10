@@ -1,4 +1,4 @@
-package de.edgelord.jbsn;
+package de.sanj0.jbsn;
 
 import java.io.BufferedWriter;
 import java.io.File;

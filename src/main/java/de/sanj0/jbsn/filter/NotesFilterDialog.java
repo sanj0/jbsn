@@ -1,8 +1,8 @@
-package de.edgelord.jbsn.filter;
+package de.sanj0.jbsn.filter;
 
-import de.edgelord.jbsn.Notes;
-import de.edgelord.jbsn.Timestamp;
-import de.edgelord.jbsn.Utils;
+import de.sanj0.jbsn.Notes;
+import de.sanj0.jbsn.Timestamp;
+import de.sanj0.jbsn.Utils;
 
 import javax.swing.*;
 import java.awt.*;

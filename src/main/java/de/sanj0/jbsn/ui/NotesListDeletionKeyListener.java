@@ -1,8 +1,8 @@
-package de.edgelord.jbsn.ui;
+package de.sanj0.jbsn.ui;
 
-import de.edgelord.jbsn.Note;
-import de.edgelord.jbsn.Notes;
-import de.edgelord.jbsn.Utils;
+import de.sanj0.jbsn.Note;
+import de.sanj0.jbsn.Notes;
+import de.sanj0.jbsn.Utils;
 
 import javax.swing.*;
 import java.awt.event.KeyAdapter;

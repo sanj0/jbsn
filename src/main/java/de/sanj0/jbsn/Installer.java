@@ -1,4 +1,4 @@
-package de.edgelord.jbsn;
+package de.sanj0.jbsn;
 
 import javax.swing.*;
 import java.io.BufferedReader;
