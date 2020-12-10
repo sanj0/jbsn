@@ -5,7 +5,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 /**
- * The captain always leaves a sinking last!
+ * The captain always leaves the sinking last
  */
 public class Captain extends Thread {
     @Override

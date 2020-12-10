@@ -14,5 +14,5 @@ function syncGit {
     fi
 }
 syncGit "automated commit at jbsn startup"
-java -cp ~/jbsn/bin/jbsn.jar de.edgelord.jbsn.Main
+java -cp ~/jbsn/bin/jbsn.jar de.sanj0.jbsn.Main
 syncGit "automated commit at jbsn exit"

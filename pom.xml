@@ -7,7 +7,7 @@
     <groupId>de.sanj0</groupId>
     <artifactId>jbsn</artifactId>
     <version>1.0-SNAPSHOT</version>
-    
+
     <build>
         <plugins>
             <plugin>
