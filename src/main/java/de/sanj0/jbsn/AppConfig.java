@@ -24,6 +24,7 @@ public class AppConfig extends Configurations {
     public static final String WEDNESDAY_KEY = "wednesday";
     public static final String THURSDAY_KEY = "thursday";
     public static final String FRIDAY_KEY = "friday";
+    public static final String USER_HOME = "\\{user.home}";
 
     public AppConfig(final File file) throws IOException {
         super(Files.readAllLines(file.toPath()).toArray(new String[0]));
@@ -35,27 +36,27 @@ public class AppConfig extends Configurations {
     }
 
     public String getBaseDir() {
-        return getAttribute(BASE_DIR_KEY);
+        return insertUserHome(getAttribute(BASE_DIR_KEY));
     }
 
     public String getNotesDir() {
-        return String.format(getAttribute(NOTES_DIR_KEY, ""), getBaseDir());
+        return insertUserHome(String.format(getAttribute(NOTES_DIR_KEY, ""), getBaseDir()));
     }
 
     public String getNotesSourcesDir() {
-        return String.format(getAttribute(NOTES_SOURCES_DIR_KEY, ""), getBaseDir());
+        return insertUserHome(String.format(getAttribute(NOTES_SOURCES_DIR_KEY, ""), getBaseDir()));
     }
 
     public String getTemplateScript() {
-        return String.format(getAttribute(TEMPLATE_SCRIPT_KEY, ""), getBaseDir());
+        return insertUserHome(String.format(getAttribute(TEMPLATE_SCRIPT_KEY, ""), getBaseDir()));
     }
 
     public String getTimestampsDir() {
-        return String.format(getAttribute(TIMESTAMPS_DIR_KEY, ""), getBaseDir());
+        return insertUserHome(String.format(getAttribute(TIMESTAMPS_DIR_KEY, ""), getBaseDir()));
     }
 
     public String getRecentlyDeletedDir() {
-        return String.format(getAttribute(RECENTLY_DELETED_DIR_KEY, ""), getBaseDir());
+        return insertUserHome(String.format(getAttribute(RECENTLY_DELETED_DIR_KEY, ""), getBaseDir()));
     }
 
     public String getName() {
@@ -64,5 +65,9 @@ public class AppConfig extends Configurations {
 
     public String getSubjects() {
         return getAttribute(SUBJECTS_KEY);
+    }
+
+    private static String insertUserHome(final String s) {
+        return s.replaceAll(USER_HOME, System.getProperty("user.home"));
     }
 }

@@ -1,4 +1,4 @@
-base-dir: /Users/edgelord/jbsn
+base-dir: {user.home}/jbsn
 notes-dir: %s/notes
 notes-sources-dir: %s/notes_sources
 template-script: %s/scripts/pages.scpt
