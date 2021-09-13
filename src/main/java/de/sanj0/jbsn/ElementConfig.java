@@ -50,7 +50,6 @@ public class ElementConfig extends Configurations {
                 out = new File(path[0]);
             }
         }
-
         write(new BufferedWriter(new FileWriter(out))).close();
     }
 
@@ -71,16 +70,13 @@ public class ElementConfig extends Configurations {
         switch (key) {
             case DATE_KEY:
                 return Utils.dateFromString(value);
-
             case VIEWED_KEY:
                 return Integer.parseInt(value);
-
             case NOTES_FILE_KEY:
                 return new File(String.format(value, AppConfigManager.APP_CONFIG.getNotesSourcesDir()));
             case HEADLINE_KEY:
             case SUBJECT_KEY:
             case NAME_KEY:
-
             default:
                 return value;
         }
