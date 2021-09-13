@@ -2,6 +2,7 @@ package de.sanj0.jbsn;
 
 import de.sanj0.jbsn.filter.NotesFilter;
 import de.sanj0.jbsn.ui.NotesListWindow;
+import de.sanj0.jbsn.ui.RequestFocusListener;
 import de.sanj0.jbsn.ui.TableSupply;
 
 import javax.swing.*;
@@ -204,11 +205,13 @@ public class Utils {
     public static String[] notesDialog(final Container parent) {
         final JComboBox<String> subject = subjectComboBox(false);
         final JTextField headline = new JTextField();
+        headline.addAncestorListener(new RequestFocusListener());
         Object[] message = {
                 "Subject:", subject,
                 "Headline:", headline
         };
 
+        headline.requestFocusInWindow();
         int option = JOptionPane.showConfirmDialog(parent, message, "Add Note", JOptionPane.OK_CANCEL_OPTION);
         if (option == JOptionPane.OK_OPTION) {
             String subjectText = (String) subject.getSelectedItem();
@@ -231,6 +234,7 @@ public class Utils {
     public static Timestamp newTimestampDialog() {
         final JComboBox<String> subject = Utils.subjectComboBox(true);
         final JTextField name = new JTextField();
+        name.addAncestorListener(new RequestFocusListener());
         Object[] message = {
                 "Subject:", subject,
                 "Name:", name

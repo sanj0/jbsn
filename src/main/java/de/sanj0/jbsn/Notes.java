@@ -12,6 +12,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class Notes {
     public static final String NOTES_FILE_EXTENSION = "jb";
@@ -74,7 +75,7 @@ public class Notes {
         return null;
     }
 
-    public static void newNote(final Container parent) throws IOException, InterruptedException {
+    public static void newNote(final Container parent) throws IOException, InterruptedException, ExecutionException {
         String[] params = Utils.notesDialog(parent);
         if (params != null) {
             final Note note = Note.createNote(params[1], params[0], Utils.today());

@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
+import java.util.concurrent.ExecutionException;
 
 /**
  * A JFrame that contains four centred buttons
@@ -91,7 +92,7 @@ public class GreetingWindow extends JFrame {
                     } else {
                         try {
                             Notes.newNote(GreetingWindow.this);
-                        } catch (IOException | InterruptedException ioException) {
+                        } catch (IOException | InterruptedException | ExecutionException ioException) {
                             ioException.printStackTrace();
                         }
                     }
