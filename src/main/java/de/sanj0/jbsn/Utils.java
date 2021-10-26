@@ -6,6 +6,7 @@ import de.sanj0.jbsn.ui.TableSupply;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -40,6 +41,18 @@ public class Utils {
         Arrays.sort(subjects, java.text.Collator.getInstance());
 
         return subjects;
+    }
+
+    public static int executeApplescript(final String scriptPath, final String... args) throws IOException, InterruptedException {
+        final String[] argv = new String[args.length + 2];
+        argv[0] = "osascript";
+        argv[1] = scriptPath;
+        if (args.length > 0)
+            System.arraycopy(args, 0, argv, 2, argv.length - 2);
+        System.out.println("ex% " + Arrays.toString(argv));
+
+        final ProcessBuilder processBuilder = new ProcessBuilder(argv);
+        return processBuilder.start().waitFor();
     }
 
     /**

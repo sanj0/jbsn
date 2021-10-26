@@ -34,6 +34,7 @@ public class Installer {
                     .getParentFile().mkdirs();
             // copy script file
             copyFromResourcesToFile("scripts/pages.scpt", AppConfigManager.APP_CONFIG.getTemplateScript());
+            copyFromResourcesToFile("scripts/export.scpt", AppConfigManager.APP_CONFIG.getExportScript());
             // copy config file
             copyFromResourcesToFile(CONFIGS_RESOURCE_NAME, AppConfigManager.CONFIG.getAbsolutePath());
 
