@@ -11,6 +11,7 @@ import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
+import java.util.concurrent.ExecutionException;
 
 /**
  * A list of static methods to
@@ -25,7 +26,7 @@ public class Buttons {
             public void mouseClicked(final MouseEvent e) {
                 try {
                     Notes.newNote(b.getParent());
-                } catch (IOException | InterruptedException ioException) {
+                } catch (IOException | InterruptedException | ExecutionException ioException) {
                     ioException.printStackTrace();
                 }
             }
