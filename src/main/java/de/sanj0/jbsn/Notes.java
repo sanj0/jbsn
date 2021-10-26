@@ -130,10 +130,8 @@ public class Notes {
                                          final String headline) throws IOException, InterruptedException {
         final File file = getNextNotesSourceFile();
         final String absolutePathHFS = Utils.toHFSPath(file.getAbsolutePath());
-        final ProcessBuilder processBuilder = new ProcessBuilder("osascript", AppConfigManager.APP_CONFIG.getTemplateScript(),
+        Utils.executeApplescript(AppConfigManager.APP_CONFIG.getTemplateScript(),
                 absolutePathHFS, subject, Utils.dateToString(date), headline);
-        processBuilder.start().waitFor();
-
         return file.getName();
     }
 

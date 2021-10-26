@@ -2,6 +2,7 @@ base-dir: {user.home}/jbsn
 notes-dir: %s/notes
 notes-sources-dir: %s/notes_sources
 template-script: %s/scripts/pages.scpt
+export-script: %s/scripts/export.scpt
 timestamps-dir: %s/timestamps
 recently-deleted-dir: %s/recently_deleted
 name: Malte Dostal

@@ -24,7 +24,7 @@ public class NotesListWindow extends JFrame {
             public void mousePressed(MouseEvent mouseEvent) {
 
                 if (mouseEvent.isPopupTrigger()) {
-                    new TableContextMenu(Utils.getSelectedNotesAsList(table)).show(mouseEvent.getComponent(), mouseEvent.getX(), mouseEvent.getY());
+                    new TableContextMenu(Utils.getSelectedNotesAsList(table), NotesListWindow.this).show(mouseEvent.getComponent(), mouseEvent.getX(), mouseEvent.getY());
                 } else if (mouseEvent.getClickCount() == 2 && mouseEvent.getButton() == MouseEvent.BUTTON1 && table.getSelectedRow() != -1) {
                     final Note note = Utils.getSelectedNotes(table)[0];
                     try {
