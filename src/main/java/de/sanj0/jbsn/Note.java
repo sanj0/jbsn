@@ -30,7 +30,7 @@ public class Note extends ElementConfig {
             throws IOException, InterruptedException {
         final Note note = new Note(headline, subject, date, 0,
                 Notes.createdNoteFile(subject, date, headline));
-        note.setConfigFile(Notes.nextFile(AppConfigManager.APP_CONFIG.getNotesDir(), Notes.NOTES.size(),  "." + Notes.NOTES_FILE_EXTENSION));
+        note.setConfigFile(Notes.nextFile(AppConfigManager.APP_CONFIG.getNotesDir(), Notes.NOTES.size(), "." + Notes.NOTES_FILE_EXTENSION));
         return note;
     }
 }

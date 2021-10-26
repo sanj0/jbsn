@@ -88,7 +88,6 @@ public class Utils {
     }
 
     /**
-     *
      * @return the current day of week or the next school day,
      * if the current day is not a school day
      */

@@ -148,7 +148,7 @@ public class Notes {
     }
 
     protected static File nextFile(final String parentDir, final int baseName, final String extensions) {
-        File file =  new File(parentDir, baseName + extensions);
+        File file = new File(parentDir, baseName + extensions);
 
         for (int i = 0; file.exists(); i++) {
             file = new File(parentDir, file.getName().replace(extensions, "." + i + extensions));

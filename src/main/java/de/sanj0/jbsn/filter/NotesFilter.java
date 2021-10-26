@@ -106,9 +106,7 @@ public class NotesFilter {
         }
 
         if (timesViewed != -1 && timesViewedMatcher != null) {
-            if (!matchesTimesViewed(note.getAttribute(Note.VIEWED_KEY))) {
-                return false;
-            }
+            return matchesTimesViewed(note.getAttribute(Note.VIEWED_KEY));
         }
         return true;
     }

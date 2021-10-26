@@ -35,6 +35,10 @@ public class AppConfig extends Configurations {
         super(reader.lines().toArray(String[]::new));
     }
 
+    private static String insertUserHome(final String s) {
+        return s.replaceAll(USER_HOME, System.getProperty("user.home"));
+    }
+
     public String getBaseDir() {
         return insertUserHome(getAttribute(BASE_DIR_KEY));
     }
@@ -65,9 +69,5 @@ public class AppConfig extends Configurations {
 
     public String getSubjects() {
         return getAttribute(SUBJECTS_KEY);
-    }
-
-    private static String insertUserHome(final String s) {
-        return s.replaceAll(USER_HOME, System.getProperty("user.home"));
     }
 }
