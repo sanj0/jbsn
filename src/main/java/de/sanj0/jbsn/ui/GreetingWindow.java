@@ -23,29 +23,18 @@ public class GreetingWindow extends JFrame {
     private final JButton notesForNextSchoolDayButton = Buttons.VIEW_NOTES_FOR_NEXT_SCHOOL_DAY();
 
     public GreetingWindow() {
-        super("jbsn - just better school notes");
+        super("jbsn");
 
-        setPreferredSize(new Dimension(750, 750));
-        add(new SettingsButtonPanel());
+        setPreferredSize(new Dimension(375, 375));
 
-        setLayout(new GridLayout(4, 4));
-
-        addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyPressed(final KeyEvent e) {
-                System.out.println("ping");
-            }
-        });
+        setLayout(new GridLayout(2, 2));
 
         //Add buttons and placeholders in order
         // to build the layout
-        Utils.placeholderHere(this, 4);
         add(addNoteButton);
         add(viewAllNotesButton);
-        Utils.placeholderHere(this, 2);
         add(viewFilteredNotesButton);
         add(notesForNextSchoolDayButton);
-        Utils.placeholderHere(this, 5);
 
         // make keyboard shortcuts possible
         // without adding a listener to all
